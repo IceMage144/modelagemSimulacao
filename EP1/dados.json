@@ -1,4 +1,4 @@
-{
+[{
 "walker":"Victor",
 "movType":"MRU",
 "times":[{"mType":"N", "csv":"victor1", "measures":"|14.16|25.61|42.69|13.87|28.33|42.41|"},
@@ -6,7 +6,7 @@
         {"mType":"N", "csv":"victor3", "measures":"|13.25|25.43|37.27|13.12|25.53|37.57|"},
         {"mType":"A", "csv":"victorAlt", "measures":"|6.46|12.70|18.60|24.60|30.60|36.64|"}
         ]
-}
+},
 {
 "walker":"Juliano",
 "movType":"MRU",
@@ -15,7 +15,7 @@
          {"mType":"N", "csv":"juliano3", "measures":"|17.66|34.36|50.13|17.96|34.53|50.98|"},
          {"mType":"A", "csv":"julianoAlt", "measures":"|8.77|17.25|25.15|33.24|40.83|48.84|"}
         ]
-}
+},
 {
 "walker":"João",
 "movType":"MRU",
@@ -24,7 +24,7 @@
          {"mType":"N", "csv":"joao3", "measures":"|11.04|22.10|33.49|12.70|22.04|33.69|"},
          {"mType":"A", "csv":"joaoAlt", "measures":"|5.44|11.17|16.52|22.25|27.92|34.13|"}
         ]
-}
+},
 {
 "walker":"Raphael 1",
 "movType":"MRUV",
@@ -33,7 +33,7 @@
          {"mType":"N", "csv":"rapha23(Rapha)", "measures":"|16.01|26.86|35.25|15.83|26.85|35.12|"},
          {"mType":"A", "csv":"rapha2Alt(5xalternado)", "measures":"|8.76|16.08|21.56|26.65|30.72|34.87|"}
         ]
-}
+},
 {
 "walker":"Raphael 2",
 "movType":"MRUV",
@@ -42,7 +42,7 @@
          {"mType":"N", "csv":"rapha13", "measures":"|16.92|27.52|35.26|16.76|27.32|35.04|"},
          {"mType":"A", "csv":"Rapha1Alt", "measures":"|8.76|17.18|22.20|27.98|31.12|35.77|"}
         ]
-}
+},
 {
 "walker":"Guilherme",
 "movType":"MRUV",
@@ -52,3 +52,4 @@
          {"mType":"A", "csv":"guilhermeAlt", "measures":"|10.14|17.70|23.19|28.36|32.77|37.11|"}
         ]
 }
+]

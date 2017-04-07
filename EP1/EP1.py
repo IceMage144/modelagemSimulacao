@@ -86,8 +86,8 @@ class Walker:
             xticks = [int(i) for i in np.arange(0, self.__finalTime(run), 5)]
             xticks = sorted(xticks + list(labelDict.keys()))
             labels = [str(i) for i in xticks]
-            labels = [labelDict.get(float(t), t) for t in labels]            
-            f, axarr = plt.subplots(2)
+            labels = [labelDict.get(float(t), t) for t in labels]
+            f, axarr = plt.subplots(2, figsize=(15, 10))
             axarr[0].plot(x, y)
             for i, j in zip(list(labelDict.keys()), realY):
                 axarr[0].plot([i, i], [0, j], 'r--')
@@ -95,6 +95,8 @@ class Walker:
             axarr[0].set_title(run["csv"])
             axarr[0].set_xticklabels(labels)
             axarr[0].set_xticks(xticks)
+            axarr[0].set_xlim(0, self.__finalTime(run) + 1)
+            axarr[0].set_ylim(0, Walker.SPACE + 1)
             removeP = lambda strg: strg.replace('(','').replace(')','')
             plt.show()
 
@@ -129,13 +131,13 @@ def main():
     listWalkers = list()
 
     with open(data) as f:
-        for block in (''.join(chain([line], islice(f, ENTRY_LENGTH))) for line in f):
-            w = json.loads(block)
-            addWalker(w, listWalkers)
+        jsonData = json.loads(f.read())
+    for j in jsonData:
+        addWalker(j, listWalkers)
 
-    for walker in listWalkers:
-        print(f"Mean Velocity ({walker.name} - {walker.movType}) = {walker.getVelocity():{3}.{5}} m/s")
-        walker.plotGraph()
+    for w in listWalkers:
+        print(f"Mean Velocity ({w.name} - {w.movType}) = {w.getVelocity():{3}.{5}} m/s")
+        w.plotGraph()
 
 
 if __name__ == '__main__':
