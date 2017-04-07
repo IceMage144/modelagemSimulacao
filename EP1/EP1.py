@@ -86,19 +86,16 @@ class Walker:
             xticks = [int(i) for i in np.arange(0, self.__finalTime(run), 5)]
             xticks = sorted(xticks + list(labelDict.keys()))
             labels = [str(i) for i in xticks]
-            labels = [labelDict.get(float(t), t) for t in labels]
-            x
-            colors = cm.rainbow(np.linspace(0, 1, len(xticks)))
+            labels = [labelDict.get(float(t), t) for t in labels]            
             f, axarr = plt.subplots(2)
             axarr[0].plot(x, y)
             for i, j in zip(list(labelDict.keys()), realY):
                 axarr[0].plot([i, i], [0, j], 'r--')
             axarr[0].scatter(realX, realY,color='red', marker="+")
-            [t.set_color(i) for (i,t) in zip(['red']*len(labelDict), list(labelDict.values()))]
-
             axarr[0].set_title(run["csv"])
             axarr[0].set_xticklabels(labels)
             axarr[0].set_xticks(xticks)
+            removeP = lambda strg: strg.replace('(','').replace(')','')
             plt.show()
 
             #axarr[1].scatter(x, y)
