@@ -1,9 +1,11 @@
 import matplotlib.cm as cm
 import sys
-from itertools import islice, chain
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+from pathlib import Path
+
 
 # Number of lines for each JSON entry
 ENTRY_LENGTH = 8
@@ -72,6 +74,15 @@ class Walker:
 
 
 
+    def __plotCsv(self, run, axis):
+        file = "./CSV/" + run['csv'] + ".csv"
+        labels = ['Tempo', 'Fx', 'Fy', 'Fz', 'Fr']
+        df = pd.read_csv(file, names=labels, sep=';', decimal=',')
+        df.plot(ax=axis)
+        ax = plt.gca()
+        ax.set_xticklabels([])
+        axis.set_ylim(-0.5, 1.5)
+        axis.set_xlim(0,4332)
 
 
     def plotGraph(self):
@@ -97,6 +108,7 @@ class Walker:
             axarr[0].set_xticks(xticks)
             axarr[0].set_xlim(0, self.__finalTime(run) + 1)
             axarr[0].set_ylim(0, Walker.SPACE + 1)
+            self.__plotCsv(run, axarr[1])
             removeP = lambda strg: strg.replace('(','').replace(')','')
             plt.show()
 
