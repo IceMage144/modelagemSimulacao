@@ -76,11 +76,12 @@ class Walker:
 
     def __plotCsv(self, run, axis):
         file = "./CSV/" + run['csv'] + ".csv"
-        labels = ['Tempo', 'Fx', 'Fy', 'Fz', 'Fr']
+        labels = ['', 'Fx', 'Fy', 'Fz', 'Fr']
         df = pd.read_csv(file, names=labels, sep=';', decimal=',')
         df.plot(ax=axis)
         ax = plt.gca()
         ax.set_xticklabels([])
+        #TODO: change
         axis.set_ylim(-0.5, 1.5)
         axis.set_xlim(0,4332)
 
@@ -98,7 +99,7 @@ class Walker:
             xticks = sorted(xticks + list(labelDict.keys()))
             labels = [str(i) for i in xticks]
             labels = [labelDict.get(float(t), t) for t in labels]
-            f, axarr = plt.subplots(2, figsize=(15, 10))
+            f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
             axarr[0].plot(x, y)
             for i, j in zip(list(labelDict.keys()), realY):
                 axarr[0].plot([i, i], [0, j], 'r--')
