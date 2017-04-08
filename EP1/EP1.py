@@ -91,13 +91,33 @@ class Walker:
         plt.legend(loc='upper right')
         axis.set_xlim(0, np.max(np.asarray(df['Tempo'])))
 
-    def __setAnnotations(self, xObs, yObs, labels, values, ax):
+    def __setAnnotations(self, **kwargs):
+        # Get arguments
+        xObs = kwargs['xObs']
+        yObs = kwargs['yObs']
+        labels = kwargs['labels']
+        values = kwargs['values']
+        error = kwargs['error']
+        meanVel = kwargs['meanVel']
+        ax = kwargs['ax']
+        # Observed time annotation
         for x, y, text, val in zip(xObs, yObs, labels, values):
-            ax.annotate(text+f"{round(val, 2)}",
+            ax.annotate(text+f" ({round(val, 2)})",
             xy=(x, y + 1), xycoords='data',
             xytext=(-15, 25), textcoords='offset points',
             arrowprops=dict(facecolor='cyan', shrink=0.05),
             horizontalalignment='right', verticalalignment='bottom')
+        if(self.movType == "MRU"):
+            #Display meanVelocity
+            ax.annotate(f"Velocidade Média:{meanVel} m/s",
+            xy=(0, 0), xycoords='data',
+            xytext=(+197.5, +175), textcoords='offset points', fontsize=13, color = "#f45100",
+            horizontalalignment='right', verticalalignment='bottom')
+            # Display error
+            ax.annotate("Erro: "+f"{round(error, 2)}",
+            xy=(0, 0), xycoords='data', xytext=(+78, +160), textcoords='offset points',
+            fontsize=13, color = "#f45100", horizontalalignment='right',
+            verticalalignment='bottom')
 
 
     def __calculateError(self, xObs, yObs, xt):
@@ -112,6 +132,7 @@ class Walker:
 
 
     def plotGraph(self):
+        # TODO: ADJUST TO MRUV
         for run in self.times:
             xt = self.__spaceF(run)
             x = np.asarray([0, self.__finalTime(run)])
@@ -129,9 +150,9 @@ class Walker:
             for i, j in zip(list(labelDict.keys()), realY):
                 axarr[0].plot([i, i], [0, j], 'r--')
             axarr[0].scatter(realX, realY,color='red', marker="+", label = "observado")
-            axarr[0].set_xlabel('tempo (s)')
-            axarr[0].set_ylabel('espaço (m)')
-            axarr[0].set_title(run["csv"])
+            axarr[0].set_xlabel('tempo (s)', fontsize=13)
+            axarr[0].set_ylabel('espaço (m)', fontsize=13)
+            axarr[0].set_title(self.movType+" - "+run["csv"], fontsize=16, color="#000c3d")
             axarr[0].set_xticklabels(labels)
             axarr[0].set_xticks(xticks)
             axarr[0].spines['right'].set_visible(False)
@@ -139,9 +160,9 @@ class Walker:
             axarr[0].set_xlim(0, self.__finalTime(run) + 1)
             axarr[0].set_ylim(0, Walker.SPACE + 1)
             axarr[0].legend(shadow=True)
-            self.__setAnnotations(realX, realY, list(labelDict.values()), list(labelDict.keys()), axarr[0])
-
-
+            self.__setAnnotations( xObs = realX, yObs = realY, labels = list(labelDict.values()),
+                values = list(labelDict.keys()), error = self.__calculateError(realX, realY, xt),
+                meanVel = round(xt(1), 3), ax = axarr[0])
             self.__plotCsv(run, axarr[1])
             plt.autoscale(False)
             plt.show()
