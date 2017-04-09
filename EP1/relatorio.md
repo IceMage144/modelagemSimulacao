@@ -46,6 +46,20 @@ Então, plota-se:
 
 ####Implementação do algoritmo
 
+A notação JSON (JavaScript Object Notation), por ser fácil de ler e escrever para seres humanos, apresenta-se como um bom formato para a leitura dos dados. Além disso é uma formatação leve para as máquinas interpretarem e isso justifica sua escolha como formato de entrada para esse programa.
+
+O programa recebe um arquivo .json com os dados do experimento realizado. O arquivo contém um vetor onde os elementos são vetores onde cada um possui as seguintes informações:
+
+* "walker": Contém o nome da pessoa que realizou o experimento.
+* "movType": Contém o tipo de movimento realizado (MRU ou MRUV).
+* "Times": Matriz que contém vetores com as informações de cada travessia. Esses vetores tem três variáveis: "mtype" que contém o tipo de travessia (normal ou alternada), "csv" que contém o nome do arquivo CSV, "measures" que contém os tempos observados na travessia e "tcsv" que contém o tempo inicial e final de acordo com as medições feitas na aplicativo Physics Tools Box.
+
+O programa utiliza o paradigma de orientação à objetos pois é vantajoso tratar cada indivíduo que realizou o experimento como um objeto visto que aplicam-se operações similares a todos eles. Dessa forma, a reusabilidade de código é favorecida com essa escolha.
+
+A class Walker modela o indiviíduo que realizou o experimento. Recebe como argumento as variáveis "walker", "movType" e "Times" presentes no arquivo de entrada JSON. Suas funções públicas são:
+
+ * getVelocity()----------------------
+
 ###3. Verificação do Programa
 
 ###4. Dados
