@@ -39,6 +39,7 @@ class Walker:
         times = A dict with the movements!
     '''
     SPACE = 30
+    XLIM = 60
 
     def __init__(self, name, movType, times):
         self.name = name
@@ -86,6 +87,8 @@ class Walker:
             def f(t):
                 return simVel*t
         else:
+            if(run["mType"] == "N"):
+                vm = 10/self.__timeList(run)[0]
             simAccel = 2*Walker.SPACE/self.__finalTime(run)**2
             def f(t):
                 return simAccel*t**2/2
@@ -122,6 +125,8 @@ class Walker:
         return [spcList, xticks]
 
     def __finalTime(self, run):
+        old = self.__timeList(run)
+        old = old[len(old) - 1]
         fTime = run["tcsv"][1] - run["tcsv"][0]
         # Semantic way of getting the final time...
         return fTime
@@ -219,7 +224,7 @@ class Walker:
             for run in self.times:
                 # Simulated: xt - space Function , (x, y) simulated graph
                 xt = self.__spaceF(run)
-                x = np.asarray([0, self.__finalTime(run)])
+                x = np.asarray([0, Walker.XLIM])
                 y = list(map(xt, x))
                 # Observed: (realX, realY) observed points in action!
                 realX = self.__timeList(run)
@@ -260,8 +265,8 @@ class Walker:
                 #            (xspa, y1) - simulated space graph, (xvel, y2) - simulated velocity graph
                 st = self.__spaceF(run)
                 vt = self.__velocityF(run)
-                xspa = np.arange(0, self.__finalTime(run), 0.01)
-                xvel = np.asarray([0, self.__finalTime(run)])
+                xspa = np.arange(0, Walker.XLIM, 0.01)
+                xvel = np.asarray([0, Walker.XLIM])
                 y1 = list(map(st, xspa))
                 y2 = list(map(vt, xvel))
                 # Observed: (realX, realY) observed points in action!
@@ -294,6 +299,7 @@ class Walker:
                 ax2.set_ylabel('velocidade (m/s)', fontsize=13)
                 ax2.set_ylim(0, vt(self.__finalTime(run)) + 1)
                 ax2.tick_params('y', colors='g')
+                ft = self.__finalTime(run)
                 # Annotate our plot
                 self.__setAnnotations(xObs = realX, yObs = realY, labels = timeNames,
                     values = realX, error = self.__calculateError(realX, realY, st),
