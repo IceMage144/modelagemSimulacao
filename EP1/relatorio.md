@@ -29,6 +29,8 @@ Como cada pessoa pode realizar dois tipos de travessia distintos (MRU E MRUV), �
 
 Após a leitura dos dados, calcula-se a velocidade média (caso a travessia atual seja do tipo MRU) ou a aceleração média (tipo MRUV) para cada indivíduo durante sua respectiva travessia. Assim sendo, o programa simula o movimento da travessia de cada indivíduo utilizando as equações analíticas do respectivo movimento.
 
+---usando os dados do acelerometro
+
 Então, plota-se:
 
   Se MRU:
@@ -58,7 +60,11 @@ O programa utiliza o paradigma de orientação à objetos pois é vantajoso trat
 
 A class Walker modela o indiviíduo que realizou o experimento. Recebe como argumento as variáveis "walker", "movType" e "Times" presentes no arquivo de entrada JSON. Suas funções públicas são:
 
- * getVelocity()----------------------
+ * getVelocity(): ------------------------------------------
+
+ * plot.graph(): Plota um gráfico relevante para cada travessia:
+    * No caso do movimento ser do tipo MRU, usando e equação s = v * t, v sendo a velocidade média da travessia e t o tempo total que ela levou. Uma simulação do movimento é feita e seu gráfico Espaço x Tempo é plotado, junto com ele, os pontos coletados no experimento, o erro (a média da diferença entre os tempos simulados e obeservados) e o gráfico dos dados obtidos pelo acelerômetro.
+    * No caso do mocimento ser do tipo MRUV, usamos as equações s = (a * t**2)/2, e v = a * t para simular o movimento e plotar o gráfico Espaço x Tempo e Velocidade x Tempo, junto com a aceleração média, os dados obtidos no experimento, o erro (a média da diferença entre os tempos simulados e obeservados) e em baixo, é plotado os dados obtidos pelo acelerômetro.
 
 ### 3. Verificação do Programa
 
