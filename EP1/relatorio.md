@@ -11,7 +11,7 @@ date: "09 de Abril, 2017"
 [//]: # (Gerando PDF usando pandoc (no terminal): pandoc -s -o teste.pdf relatorio.md)
 [//]: # (ESTE É UM COMENTÁRIO : Versão inicial do relatório!)
 
-###1. Introdução
+### 1. Introdução
 
 O EP1 consiste em realizar um experimento já feito em sala, do início ao fim. Isto é, observar um fenômeno, medir com um tipo de sensor, obter dados acerca do experimento, utilizar uma modelagem matemática e finalmente analisar os dados e simular o fenômeno, que é a síntese computacional.
 
@@ -19,9 +19,9 @@ O experimento é um estudo do movimento retilíneo uniforme (MRU) e movimento re
 
 Com esse experimento espera-se observar as semelhanças e diferenças (erros) entre a análise analítica do MRU e MRUV, e comparar com o que foi obtido manualmente na prática do experimento.
 
-###2. Método
+### 2. Método
 
-####Descrição do algoritmo
+#### Descrição do algoritmo
 
 O programa EP1 tem como objetivo receber dados do experimento da travessia de forma genérica, ou seja, o programa deve calcular as estatísticas de quaisquer dados entrados, independentemente da quantidade de travessias realizadas. Entretanto, o programa deve admitir como padrão uma travessia de 30 metros.
 
@@ -44,7 +44,7 @@ Então, plota-se:
   * Gráfico dos dados obtidos pelo acelerômetro.
   * Erro entre a simulação e o experimento real.
 
-####Implementação do algoritmo
+#### Implementação do algoritmo
 
 A notação JSON (JavaScript Object Notation), por ser fácil de ler e escrever para seres humanos, apresenta-se como um bom formato para a leitura dos dados. Além disso é uma formatação leve para as máquinas interpretarem e isso justifica sua escolha como formato de entrada para esse programa.
 
@@ -60,12 +60,12 @@ A class Walker modela o indiviíduo que realizou o experimento. Recebe como argu
 
  * getVelocity()----------------------
 
-###3. Verificação do Programa
+### 3. Verificação do Programa
 
-###4. Dados
+### 4. Dados
 
-###5. Interpretação
+### 5. Interpretação
 
-###6. Log
+### 6. Log
 
 #### Contribuições dos Autores:$\\$
