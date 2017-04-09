@@ -21,6 +21,31 @@ Com esse experimento espera-se observar as semelhanças e diferenças (erros) en
 
 ###2. Método
 
+####Descrição do algoritmo
+
+O programa EP1 tem como objetivo receber dados do experimento da travessia de forma genérica, ou seja, o programa deve calcular as estatísticas de quaisquer dados entrados, independentemente da quantidade de travessias realizadas. Entretanto, o programa deve admitir como padrão uma travessia de 30 metros.
+
+Como cada pessoa pode realizar dois tipos de travessia distintos (MRU E MRUV), é interessante dar a entrada de dados separando cada pessoa com seus respectivos tempos. Além disso, temos múltiplas travessias e a medição dos tempos pode ser realizada de duas formas: normal e alternada.
+
+Após a leitura dos dados, calcula-se a velocidade média (caso a travessia atual seja do tipo MRU) ou a aceleração média (tipo MRUV) para cada indivíduo durante sua respectiva travessia. Assim sendo, o programa simula o movimento da travessia de cada indivíduo utilizando as equações analíticas do respectivo movimento.
+
+Então, plota-se:
+
+  Se MRU:
+  * A velocidade média.
+  * Gráfico da função que descreve a simulação do movimento (Espaço x Tempo) e os dados obtidos pelos observadores durante o experimento real.
+  * Gráfico dos dados obtidos pelo acelerômetro.
+  * Erro entre a simulação e o experimento real.
+
+  Se MRUV:
+  * A aceleração média.
+  * Gráfico da função que descreve a simulação do movimento (Espaço x Tempo) e os dados obtidos pelos observadores.
+  * Gráfico da função que descreve a simulação (Velocidade x Tempo).
+  * Gráfico dos dados obtidos pelo acelerômetro.
+  * Erro entre a simulação e o experimento real.
+
+####Implementação do algoritmo
+
 ###3. Verificação do Programa
 
 ###4. Dados
