@@ -3,7 +3,9 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from pathlib import Path
+from numpy.random import rand
+
+
 
 def main():
     # Parse a json file passed as argument
@@ -21,8 +23,9 @@ def main():
 
     # TODO: REMOVE this. This calculates the mean velocity of every walker, then plot a graph
     for w in listWalkers:
-        print(f"Mean Velocity ({w.name} - {w.movType}) = {w.getVelocity():{3}.{5}} m/s")
-        w.plotGraph()
+        print(f"Mean Velocity ({w.name} - {w.movType}) =  m/s")
+        if(w.movType == "MRUV"):
+            w.plotGraph()
 
 def addWalker(w, listWalkers):
     newWalker = Walker(w['walker'], w['movType'], w['times'])
@@ -36,6 +39,7 @@ class Walker:
         times = A dict with the movements!
     '''
     SPACE = 30
+    XLIM = 60
 
     def __init__(self, name, movType, times):
         self.name = name
@@ -59,7 +63,7 @@ class Walker:
         used with MRU movements.
         '''
         #TODO: Modify so that the simulated mean velocity uses the CSV final time.
-        # TODO: Probably this will be removed!!
+        #TODO: Probably this will be removed!!
         msr = [float(m) for m in run['measures'].split("|") if m != '']
         # Alternate measure
         if(run['mType'] == 'A'):
@@ -83,6 +87,8 @@ class Walker:
             def f(t):
                 return simVel*t
         else:
+            if(run["mType"] == "N"):
+                vm = 10/self.__timeList(run)[0]
             simAccel = 2*Walker.SPACE/self.__finalTime(run)**2
             def f(t):
                 return simAccel*t**2/2
@@ -118,13 +124,12 @@ class Walker:
 
         return [spcList, xticks]
 
-
     def __finalTime(self, run):
+        old = self.__timeList(run)
+        old = old[len(old) - 1]
         fTime = run["tcsv"][1] - run["tcsv"][0]
         # Semantic way of getting the final time...
         return fTime
-
-
 
     def __plotCsv(self, run, axis):
         '''
@@ -135,15 +140,16 @@ class Walker:
         labels = ['Tempo', 'Fx', 'Fy', 'Fz', 'Fr']
         df = pd.read_csv(file, names=labels, sep=';', decimal=',')
         df.plot(ax=axis, x = 'Tempo')
-        ax = plt.gca()
-        ax.set_yticklabels([])
-        ax.set_xlabel("")
-        plt.tick_params(axis='both', which='both', bottom='off',
-                        top='off', labelbottom='off', right='off',
-                        left='off', labelleft='off')
-        ax.axis('off')
-        plt.legend(loc='upper right')
+        axis.set_yticklabels([])
+        axis.set_xlabel("")
+        axis.spines['right'].set_visible(False)
+        axis.spines['top'].set_visible(False)
+        axis.spines['bottom'].set_visible(False)
+        axis.spines['left'].set_visible(False)
+        axis.axis('off')
+        axis.legend(loc='upper left')
         axis.set_xlim(0, np.max(np.asarray(df['Tempo'])))
+
 
     def __setAnnotations(self, **kwargs):
         '''
@@ -190,7 +196,6 @@ class Walker:
             fontsize=13, color = "#f45100", horizontalalignment='right',
             verticalalignment='bottom')
 
-
     def __calculateError(self, xObs, yObs, xt):
         '''
         Calculates the mean error of a list of points in the form (xObs, yObs) and
@@ -202,8 +207,6 @@ class Walker:
         error = [abs(y - xt(x)) for x, y in  zip(xObs, yObs)]
         return sum(error)/len(error)
 
-
-
     def plotGraph(self):
         '''
         Plots the full simulation and data in a matplotlib plot!
@@ -214,14 +217,14 @@ class Walker:
               subplots position (http://matplotlib.org/users/gridspec.html), or try
               to plot both velocity in the same subplot, but using a secondary axis to
               show the different data (check this http://matplotlib.org/examples/api/two_scales.html).
-              The plotCSV call would be almost equal, you just would have to pass the
+              The plotCSV4 call would be almost equal, you just would have to pass the
               right axis to plot the csv.
         '''
         if self.movType == "MRU":
             for run in self.times:
                 # Simulated: xt - space Function , (x, y) simulated graph
                 xt = self.__spaceF(run)
-                x = np.asarray([0, self.__finalTime(run)])
+                x = np.asarray([0, Walker.XLIM])
                 y = list(map(xt, x))
                 # Observed: (realX, realY) observed points in action!
                 realX = self.__timeList(run)
@@ -262,8 +265,8 @@ class Walker:
                 #            (xspa, y1) - simulated space graph, (xvel, y2) - simulated velocity graph
                 st = self.__spaceF(run)
                 vt = self.__velocityF(run)
-                xspa = np.arange(0, self.__finalTime(run), 0.01)
-                xvel = np.asarray([0, self.__finalTime(run)])
+                xspa = np.arange(0, Walker.XLIM, 0.01)
+                xvel = np.asarray([0, Walker.XLIM])
                 y1 = list(map(st, xspa))
                 y2 = list(map(vt, xvel))
                 # Observed: (realX, realY) observed points in action!
@@ -276,34 +279,36 @@ class Walker:
                 # Create the plot, and do matplotlib stuff
                 f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
                 ax1 = axarr[0]
+                ax2 = ax1.twinx()
+                ax3 = axarr[1]
                 ax1.plot(xspa, y1, label="espaço simulado")
-                ax1.plot(xvel, y2, label="velocidade simulada")
                 for i, j in zip(realX, realY):
                     ax1.plot([i, i], [0, j], 'r--')
                 ax1.scatter(realX, realY,color='red', marker="+", label="observado")
                 ax1.set_xlabel('tempo (s)', fontsize=13)
                 ax1.set_ylabel('espaço (m)', fontsize=13)
                 ax1.set_title(self.movType+" - "+run["csv"], fontsize=16, color="#000c3d")
-                ax1.set_xticklabels(labels)
                 ax1.set_xticks(xticks)
-                ax1.spines['right'].set_visible(False)
-                ax1.spines['top'].set_visible(False)
+                ax1.set_xticklabels(labels)
                 ax1.set_xlim(0, self.__finalTime(run) + 1)
                 ax1.set_ylim(0, Walker.SPACE + 1)
-                ax1.legend(shadow=True)
+                ax1.plot(0, 0,  'g-', label="velocidade simulada")
                 ax1.tick_params('y', colors='b')
-                ax1.plot()
-                ax2 = ax1.twinx()
+                ax2.plot(xvel, y2, 'g-')
+                ax1.legend(shadow=True, loc = "upper left")
                 ax2.set_ylabel('velocidade (m/s)', fontsize=13)
-                ax2.set_ylim(0, Walker.SPACE + 1)
-                ax2.tick_params('y', colors='r')
+                ax2.set_ylim(0, vt(self.__finalTime(run)) + 1)
+                ax2.tick_params('y', colors='g')
+                ft = self.__finalTime(run)
                 # Annotate our plot
                 self.__setAnnotations(xObs = realX, yObs = realY, labels = timeNames,
                     values = realX, error = self.__calculateError(realX, realY, st),
                     mean = round(vt(1), 3), ax = ax1)
-                # Plot a CSV in the second axis
-                self.__plotCsv(run, axarr[1])
+                self.__plotCsv(run, ax3)
+                plt.setp(ax1.get_xticklabels(), visible=True)
+                plt.setp(ax1.xaxis.get_label(), visible=True)
                 plt.autoscale(False)
+                plt.tight_layout(pad=2, w_pad=0.5, h_pad=5.0)
                 # Show the final plot! :)
                 plt.show()
 

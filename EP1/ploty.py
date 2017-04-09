@@ -21,21 +21,55 @@ The twinx and twiny methods are also exposed as pyplot functions.
 
 import numpy as np
 import matplotlib.pyplot as plt
+def top1():
+    fig, ax1 = plt.subplots()
+    t = np.arange(0, 40)
+    space = np.asarray(list(map(lambda x: 0.05*(x**2)/2, t)))
+    vel = np.asarray(list(map(lambda x: 0.05*x, t)))
+    ax1.plot(t, space, 'b-')
+    ax1.set_xlabel('time (s)', fontsize = 14)
+    # Make the y-axis label, ticks and tick labels match the line color.
+    ax1.set_ylabel('Space (m)', color='b', fontsize = 14 )
+    ax1.tick_params('y', colors='b')
 
-fig, ax1 = plt.subplots()
-t = np.arange(0, 40)
-space = np.asarray(list(map(lambda x: 0.05*(x**2)/2, t)))
-vel = np.asarray(list(map(lambda x: 0.05*x, t)))
-ax1.plot(t, space, 'b-')
-ax1.set_xlabel('time (s)', fontsize = 14)
-# Make the y-axis label, ticks and tick labels match the line color.
-ax1.set_ylabel('Space (m)', color='b', fontsize = 14 )
-ax1.tick_params('y', colors='b')
+    ax2 = ax1.twinx()
+    ax2.plot(t, vel, 'r-')
+    ax2.set_ylabel('Velocity (m/s)', color='r', fontsize = 14)
+    ax2.tick_params('y', colors='r')
 
-ax2 = ax1.twinx()
-ax2.plot(t, vel, 'r-')
-ax2.set_ylabel('Velocity (m/s)', color='r', fontsize = 14)
-ax2.tick_params('y', colors='r')
+    fig.tight_layout()
+    plt.show()
 
-fig.tight_layout()
-plt.show()
+def top2():
+    f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
+    ax1 = axarr[0]
+    ax2 = ax1.twinx()
+    ax1.plot(np.arange(10), np.exp(np.arange(10)), label="espaço simulado")
+    ax1.set_xlabel('tempo (s)', fontsize=13)
+    ax2.set_ylabel('espaço (m)', fontsize=13)
+    ax1.legend(shadow=True)
+    ax2.legend(shadow=True)
+    plt.show()
+
+def top3():
+    from numpy.random import rand
+    import matplotlib
+    matplotlib.use('gtkagg')
+    import matplotlib.pyplot as plt
+
+    # create all axes we need
+    ax0 = plt.subplot(211)
+    ax1 = ax0.twinx()
+    ax2 = plt.subplot(212)
+    ax3 = ax2.twinx()
+
+    # share the secondary axes
+    ax1.get_shared_y_axes().join(ax1, ax3)
+
+    ax0.plot(rand(1) * rand(10),'r')
+    ax1.plot(10*rand(1) * rand(10),'b')
+    ax2.plot(3*rand(1) * rand(10),'g')
+    ax3.plot(10*rand(1) * rand(10),'y')
+    plt.show()
+
+top3()
