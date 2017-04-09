@@ -110,10 +110,9 @@ class Walker:
 
 
     def __finalTime(self, run):
+        fTime = run["tcsv"][1] - run["tcsv"][0]
         # Semantic way of getting the final time...
-        # TODO: Check uses after CSV time fix!
-        msr = self.__timeList(run)
-        return msr[len(msr) - 1]
+        return fTime
 
 
 
