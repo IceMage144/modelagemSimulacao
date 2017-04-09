@@ -78,10 +78,20 @@ class Walker:
 
         Note that this returns a closure.
         '''
-        #TODO: Change final time to be something from the CSV
-        simVel = Walker.SPACE/self.__finalTime(run)
+        if self.movType == "MRU":
+            simVel = Walker.SPACE/self.__finalTime(run)
+            def f(t):
+                return simVel*t
+        else:
+            simAccel = 2*Walker.SPACE/self.__finalTime(run)**2
+            def f(t):
+                return simAccel*t**2/2
+        return f
+
+    def __velocityF(self, run):
+        simAccel = 2*Walker.SPACE/self.__finalTime(run)**2
         def f(t):
-            return simVel*t
+            return simAccel*t
         return f
 
     def __timeList(self, run):
@@ -138,7 +148,7 @@ class Walker:
     def __setAnnotations(self, **kwargs):
         '''
         Plot the measured time, the calculated error, and the
-        mean velocity if it's MRU.
+        mean velocity, if it's MRU, or the mean acceleration, if it's MRUV.
         '''
         #TODO: Should plot different things if it's MRUV, e.g.:
         #      plot the mean acceleration, and the two different errors
@@ -148,7 +158,7 @@ class Walker:
         labels = kwargs['labels']
         values = kwargs['values']
         error = kwargs['error']
-        meanVel = kwargs['meanVel']
+        mean = kwargs['mean']
         ax = kwargs['ax']
         # Observed time annotation
         for x, y, text, val in zip(xObs, yObs, labels, values):
@@ -159,7 +169,18 @@ class Walker:
             horizontalalignment='right', verticalalignment='bottom')
         if(self.movType == "MRU"):
             #Display meanVelocity
-            ax.annotate(f"Velocidade Média:{meanVel} m/s",
+            ax.annotate(f"Velocidade Média:{mean} m/s",
+            xy=(0, 0), xycoords='data',
+            xytext=(+197.5, +175), textcoords='offset points', fontsize=13, color = "#f45100",
+            horizontalalignment='right', verticalalignment='bottom')
+            # Display error
+            ax.annotate("Erro: "+f"{round(error, 2)}",
+            xy=(0, 0), xycoords='data', xytext=(+78, +160), textcoords='offset points',
+            fontsize=13, color = "#f45100", horizontalalignment='right',
+            verticalalignment='bottom')
+        else:
+            #Display meanAcceleration
+            ax.annotate(f"Aceleração Média:{mean} m/s²",
             xy=(0, 0), xycoords='data',
             xytext=(+197.5, +175), textcoords='offset points', fontsize=13, color = "#f45100",
             horizontalalignment='right', verticalalignment='bottom')
@@ -228,7 +249,58 @@ class Walker:
                 # Annotate our plot
                 self.__setAnnotations( xObs = realX, yObs = realY, labels = timeNames,
                     values = realX, error = self.__calculateError(realX, realY, xt),
-                    meanVel = round(xt(1), 3), ax = axarr[0])
+                    mean = round(xt(1), 3), ax = axarr[0])
+                # Plot a CSV in the second axis
+                self.__plotCsv(run, axarr[1])
+                plt.autoscale(False)
+                # Show the final plot! :)
+                plt.show()
+
+        else:
+            for run in self.times:
+                # Simulated: st - space Function , vt - velocity function
+                #            (xspa, y1) - simulated space graph, (xvel, y2) - simulated velocity graph
+                st = self.__spaceF(run)
+                vt = self.__velocityF(run)
+                xspa = np.arange(0, self.__finalTime(run), 0.01)
+                xvel = np.asarray([0, self.__finalTime(run)])
+                y1 = list(map(st, xspa))
+                y2 = list(map(vt, xvel))
+                # Observed: (realX, realY) observed points in action!
+                realX = self.__timeList(run)
+                realY = self.__spaceList(run)[0]
+                # Labels and Xticks
+                timeNames = self.__spaceList(run)[1]
+                xticks = [int(i) for i in np.arange(0, self.__finalTime(run), 5)]
+                labels = [str(i) for i in xticks]
+                # Create the plot, and do matplotlib stuff
+                f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
+                ax1 = axarr[0]
+                ax1.plot(xspa, y1, label="espaço simulado")
+                ax1.plot(xvel, y2, label="velocidade simulada")
+                for i, j in zip(realX, realY):
+                    ax1.plot([i, i], [0, j], 'r--')
+                ax1.scatter(realX, realY,color='red', marker="+", label="observado")
+                ax1.set_xlabel('tempo (s)', fontsize=13)
+                ax1.set_ylabel('espaço (m)', fontsize=13)
+                ax1.set_title(self.movType+" - "+run["csv"], fontsize=16, color="#000c3d")
+                ax1.set_xticklabels(labels)
+                ax1.set_xticks(xticks)
+                ax1.spines['right'].set_visible(False)
+                ax1.spines['top'].set_visible(False)
+                ax1.set_xlim(0, self.__finalTime(run) + 1)
+                ax1.set_ylim(0, Walker.SPACE + 1)
+                ax1.legend(shadow=True)
+                ax1.tick_params('y', colors='b')
+                ax1.plot()
+                ax2 = ax1.twinx()
+                ax2.set_ylabel('velocidade (m/s)', fontsize=13)
+                ax2.set_ylim(0, Walker.SPACE + 1)
+                ax2.tick_params('y', colors='r')
+                # Annotate our plot
+                self.__setAnnotations(xObs = realX, yObs = realY, labels = timeNames,
+                    values = realX, error = self.__calculateError(realX, realY, st),
+                    mean = round(vt(1), 3), ax = ax1)
                 # Plot a CSV in the second axis
                 self.__plotCsv(run, axarr[1])
                 plt.autoscale(False)
