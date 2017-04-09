@@ -5,6 +5,7 @@ author:
 - 'João Gabriel Basi Nº USP: 9793801'
 - 'Victor Chiaradia Gramuglia Araujo   Nº USP: 9793756'
 - 'Guilherme Costa Vieira Nº USP: 9790930'
+- 'Raphael dos Reis Gusmão Nº 9778561'
 geometry: margin=3cm
 date: "09 de Abril, 2017"
 ---
@@ -50,21 +51,21 @@ Então, plota-se:
 
 A notação JSON (JavaScript Object Notation), por ser fácil de ler e escrever para seres humanos, apresenta-se como um bom formato para a leitura dos dados. Além disso é uma formatação leve para as máquinas interpretarem e isso justifica sua escolha como formato de entrada para esse programa.
 
-O programa recebe um arquivo .json com os dados do experimento realizado. O arquivo contém um vetor onde os elementos são vetores onde cada um possui as seguintes informações:
+O programa recebe um arquivo .json com os dados do experimento realizado. O arquivo contém um vetor na qual os elementos são vetores e cada um deçes possui as seguintes informações:
 
 * "walker": Contém o nome da pessoa que realizou o experimento.
 * "movType": Contém o tipo de movimento realizado (MRU ou MRUV).
 * "Times": Matriz que contém vetores com as informações de cada travessia. Esses vetores tem três variáveis: "mtype" que contém o tipo de travessia (normal ou alternada), "csv" que contém o nome do arquivo CSV, "measures" que contém os tempos observados na travessia e "tcsv" que contém o tempo inicial e final de acordo com as medições feitas na aplicativo Physics Tools Box.
 
-O programa utiliza o paradigma de orientação à objetos pois é vantajoso tratar cada indivíduo que realizou o experimento como um objeto visto que aplicam-se operações similares a todos eles. Dessa forma, a reusabilidade de código é favorecida com essa escolha.
+O programa utiliza o paradigma de orientação à objetos pois é vantajoso tratar cada indivíduo que realizou o experimento como um objeto, visto que aplicam-se operações similares a todos eles. Dessa forma, a reusabilidade de código é favorecida com essa escolha.
 
 A class Walker modela o indiviíduo que realizou o experimento. Recebe como argumento as variáveis "walker", "movType" e "Times" presentes no arquivo de entrada JSON. Suas funções públicas são:
 
  * getVelocity(): ------------------------------------------
 
  * plot.graph(): Plota um gráfico relevante para cada travessia:
-    * No caso do movimento ser do tipo MRU, usando e equação s = v * t, v sendo a velocidade média da travessia e t o tempo total que ela levou. Uma simulação do movimento é feita e seu gráfico Espaço x Tempo é plotado, junto com ele, os pontos coletados no experimento, o erro (a média da diferença entre os tempos simulados e obeservados) e o gráfico dos dados obtidos pelo acelerômetro.
-    * No caso do mocimento ser do tipo MRUV, usamos as equações s = (a * t**2)/2, e v = a * t para simular o movimento e plotar o gráfico Espaço x Tempo e Velocidade x Tempo, junto com a aceleração média, os dados obtidos no experimento, o erro (a média da diferença entre os tempos simulados e obeservados) e em baixo, é plotado os dados obtidos pelo acelerômetro.
+    * No caso do movimento ser do tipo MRU, usando a equação s = v * t, v sendo a velocidade média da travessia e t o tempo total que ela levou. Uma simulação do movimento é feita e seu gráfico Espaço x Tempo é plotado e, junto com ele, os pontos coletados no experimento, o erro (a média da diferença entre os tempos simulados e obeservados) e o gráfico dos dados obtidos pelo acelerômetro.
+    * No caso do movimento ser do tipo MRUV, utiliza-se as equações s = (a * t**2)/2, e v = a * t para simular o movimento e plotar o gráfico Espaço x Tempo e Velocidade x Tempo. Além disso, plota-se a aceleração média, os dados obtidos no experimento, o erro (a média da diferença entre os tempos simulados e observados) e em baixo, os dados obtidos pelo acelerômetro.
 
 ### 3. Verificação do Programa
 
