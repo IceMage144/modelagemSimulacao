@@ -15,6 +15,7 @@ output:
       in_header: figure_placement.tex
 
 ---
+
 [//]: # (Gerando PDF usando pandoc (no terminal): pandoc -s -o teste.pdf relatorio.md)
 [//]: # (ESTE É UM COMENTÁRIO : Versão inicial do relatório!)
 
