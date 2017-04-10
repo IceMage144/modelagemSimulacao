@@ -120,7 +120,6 @@ class Walker:
         return fTime
 
     def __plotCsv(self, run, axis):
-        return True
         '''
         Receives a run, and plot the CSV in a given axis!
         It removes labels, set a xlim, and add legend.
