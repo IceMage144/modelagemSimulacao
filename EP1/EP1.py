@@ -21,11 +21,7 @@ def main():
     for j in jsonData:
         addWalker(j, listWalkers)
 
-    # TODO: REMOVE this. This calculates the mean velocity of every walker, then plot a graph
     for w in listWalkers:
-        print(f"Mean Velocity ({w.name} - {w.movType})")
-        if(w.movType == "MRU"):
-            print(f" --> {w.getVelocity()}")
         w.plotInfo()
         w.plotGraph()
 
@@ -55,23 +51,27 @@ class Walker:
         fig = plt.figure(figsize=(3.3,0.6))
         fig.suptitle(f"{self.movType} - {self.name}", fontsize=16, fontweight='bold')
         plt.axis('off')
+        ax = fig.add_subplot(111)
+        ax.axis([0, 10, 0, 10])
+        plt.tight_layout(pad=0.42, w_pad=0.5, h_pad=0.5)
         if self.movType == "MRU":
-            ax = fig.add_subplot(111)
-            ax.text(-0.6, -3.5, f'Velocidade média: {round(self.getVelocity(), 3)} m/s', fontsize=15)
-            ax.axis([0, 10, 0, 10])
-            plt.tight_layout(pad=0.42, w_pad=0.5, h_pad=0.5)
-            plt.show()
+            ax.text(-0.6, -3.5, f'Velocidade média: {round(self.__getVelocity(), 3)} m/s', fontsize=15)
+        else:
+            ax.text(-0.6, -3.5, f'Aceleração média: {round(self.__getAcceleration(), 3)} m/s²', fontsize=15)
+        plt.show()
+
+
+    def __getAcceleration(self):
+        mAcc = [self.__velocityF(run)(1) for run in self.times]
+        return sum(mAcc)/len(mAcc)
 
     def __getVelocity(self):
         '''
         Returns the mean velocity of a Walker in all of his runs!
         Should only be used with MRU movements!
         '''
-        if self.movType != "MRU":
-            raise ValueError("getVelocity(): You can't get MRUV mean velocity!")
-        mVel = [Walker.SPACE/self.__finalTime(run) for run in self.times]
-        mVel = sum(mVel)/len(mVel)
-        return mVel
+        mVel = [self.__spaceF(run)(1) for run in self.times]
+        return sum(mVel)/len(mVel)
 
     def __spaceF(self, run):
         '''
@@ -147,8 +147,6 @@ class Walker:
         Plot the measured time, the calculated error, and the
         mean velocity, if it's MRU, or the mean acceleration, if it's MRUV.
         '''
-        #TODO: Should plot different things if it's MRUV, e.g.:
-        #      plot the mean acceleration, and the two different errors
         # Get arguments
         xObs = kwargs['xObs']
         yObs = kwargs['yObs']
@@ -201,15 +199,6 @@ class Walker:
     def plotGraph(self):
         '''
         Plots the full simulation and data in a matplotlib plot!
-        '''
-        '''
-        TODO: Adjust to plot for MRUV (or create a different PRIVATE method and call it here).
-              The different function would probably use gridspec to create customized
-              subplots position (http://matplotlib.org/users/gridspec.html), or try
-              to plot both velocity in the same subplot, but using a secondary axis to
-              show the different data (check this http://matplotlib.org/examples/api/two_scales.html).
-              The plotCSV4 call would be almost equal, you just would have to pass the
-              right axis to plot the csv.
         '''
         if self.movType == "MRU":
             for run in self.times:
