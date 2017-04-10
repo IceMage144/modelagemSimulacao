@@ -2,10 +2,10 @@
 title:  'Relatório do EP1'
 author:
 - 'Guilherme Costa Vieira Nº USP: 9790930'
+- 'Victor Chiaradia Gramuglia Araujo   Nº USP: 9793756'
 - 'João Gabriel Basi Nº USP: 9793801'
 - 'Juliano Garcia de Oliveira Nº USP: 9277086'
 - 'Raphael dos Reis Gusmão Nº 9778561'
-- 'Victor Chiaradia Gramuglia Araújo   Nº USP: 9793756'
 geometry: margin=3cm
 date: "10 de Abril, 2017"
 output:
@@ -15,10 +15,6 @@ output:
       in_header: figure_placement.tex
 
 ---
-
-[//]: # (Gerando PDF usando pandoc (no terminal): pandoc -s -o teste.pdf relatorio.md)
-[//]: # (ESTE É UM COMENTÁRIO : Versão inicial do relatório!)
-
 ### 1. Introdução
 
 O EP1 consiste em realizar um experimento já feito em sala, do início ao fim. Isto é, observar um fenômeno, medir com um tipo de sensor, obter dados acerca do experimento, utilizar uma modelagem matemática e finalmente analisar os dados e simular o fenômeno, que é a síntese computacional.
@@ -34,6 +30,10 @@ Para realizar o experimento da travessia conforme proposto pela descrição, foi
 Para o movimento retilínio uniforme, optou-se por traçar linhas a cada 0,5m por todo o percurso de 30 metros a ser percorrido e assim, o indívuo que caminhava pôde manter seus passos uniformes. Mas não utlizou-se metrônomo para controlar o ritmo dos passos nesse caso, pois a contagem mental mostrou-se eficiente. Já para o movimento retilínio uniformemente variado, além das linhas utilizou-se o auxílio de uma metrônomo acelerado.
 
 Foi necessário repetir o experimento no dia seguinte após sua realização, pois alguns arquivos .csv com os dados do acelerômetro capturados pelo aplicativo Physics Tool Box estavam com taxa de amostragem muito discrepantes entre si devido as diferenças entre os aparelhos celulares. Esse erro foi corrigido utilizando o mesmo aparelho para gravar os dados do sensor.
+
+A visualização do experimento pode ser observada no vídeo:
+
+https://www.youtube.com/watch?v=ItM1CYPSlik
 
 ### 3. Método
 
@@ -135,6 +135,23 @@ Segue alguns resultados obtidos usando os dados enviados no arquivo json:
 
 ![MRUV com CSV - Raphael](IMAGES/figure_Rmruv.png){#id .class width=450 height=450}
 
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+$\\$
+
 ### 6. Análise
 
 Conforme será mostrado, em média o erro do programa diminui se houver um aumento na taxa de amostragem de tempo. Por esse motivo, a medição normal (medição dupla do tempo nas posições 10m, 20m e 30m) e a medição alternada (medição única porém nas posições 5m, 10m, 15m, 25m e 30m) possuem erros diferentes. Usando os dados fornecidos no arquivo .json temos:
@@ -169,6 +186,11 @@ Já na criação do algoritmo houve problemas para achar a velocidade inicial no
 - Para a edição foram 26 horas divididas em 7 dias.
 - Para criação do algoritmo foram nescessárias 28 horas divididas em 5 dias.
 - Para a criação do relatório foram 15 horas divididas em 2 dias.
+
+$\\$
+$\\$
+$\\$
+$\\$
 
 #### Contribuições dos Autores:$\\$
 
