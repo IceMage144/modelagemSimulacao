@@ -151,6 +151,8 @@ Conforme será mostrado, em média o erro do programa diminui se houver um aumen
 
 Com os dados coletados é possivel verificar que o algoritmo escrito consegue simular os movimentos (MRU e MRUV) de forma precisa (erro médio baixo), com isso podemos concluir que o sistema físico analisado não possui variáveis significativas que não foram consideradas no algoritmo (como atrito, resistência do ar, etc). Em suma, o modelo matemático é uma boa simulação da realidade, no caso do nosso experimento, já que o erro foi bastante baixo e não vimos grande discrepância com o que foi previsto na modelagem matemática e o que foi observado na execução do experimento em si.
 
+Uma sugestão em relação ao projeto seria fazer a especificação do EP em conjunto com a turma, e ler a especificação para a sala, visto que há trechos que só depois fomos perceber que podiam ser interpretados de outras formas. Outro ponto sobre a especificação do programa é a sugestão de  uma maior padronização do que é esperado do EP, qual é o objetivo central que se espera obter com o experimento, etc.
+
 ### 8. Crítica
 
 Em termos técnicos, o grupo adquiriu melhor entendimento sobre orientação a objetos e aspectos de programação funcional em python (closures, lambdas, função map, etc), manipulação de estruturas de dados como dicionários e json, a biblioteca gráfica do matplotlib, além de aprender mais sobre a edição de vídeos e efeitos especiais.
@@ -177,4 +179,4 @@ Já na criação do algoritmo houve problemas para achar a velocidade inicial no
 - Victor Chiaradia Gramuglia Araújo: Preparação do experimento, travessia, medição do tempo, filmagem e relatório;
 
 #### Agradecimentos$\\$
-- Agradescimento especial para Bernardo Nigri, bacharelando em relações internacionais do IRI-USP, por ajudar na revisão ortográfica e gramatical do texto.
+- Agradecimento especial para Bernardo Nigri, bacharelando em relações internacionais do IRI-USP, por ajudar na revisão ortográfica e gramatical do texto.
