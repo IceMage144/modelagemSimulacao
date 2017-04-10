@@ -33,7 +33,7 @@ Foi necessário repetir o experimento no dia seguinte após sua realização, po
 
 A visualização do experimento pode ser observada no vídeo:
 
-https://www.youtube.com/watch?v=ItM1CYPSlik
+[https://www.youtube.com/watch?v=ItM1CYPSlik](https://www.youtube.com/watch?v=ItM1CYPSlik)
 
 ### 3. Método
 
