@@ -139,13 +139,13 @@ Segue alguns resultados obtidos usando os dados enviados no arquivo json:
 
 Conforme sera mostrado, em média o erro do programa diminui se houver uma aumento na taxa de amostragem de tempo. Por este motivo, a medição normal (medição dupla do tempo nas posições 10m, 20m e 30m) e a medição alternada (medição única porém nas posições 5m, 10m, 15m, 25m e 30m) possuem erros diferentes. Usando os dados fornecidos no arquivo .json temos:
 
-![Erro MRU - Normal](IMAGES/Statistics/ERROS_MRU_NORMAL.png){#id .class width=350}
+![Erro MRU - Normal](IMAGES/Statistics/ERROS_MRU_NORMAL.png){#id .class width=400}
 
-![Erro MRU - Alternado](IMAGES/Statistics/ERROS_MRU_ALT.png){#id .class width=350}
+![Erro MRU - Alternado](IMAGES/Statistics/ERROS_MRU_ALT.png){#id .class width=400}
 
-![Erro MRU - Normal](IMAGES/Statistics/ERROS_MRUV_NORMAL.png){#id .class width=350}
+![Erro MRU - Normal](IMAGES/Statistics/ERROS_MRUV_NORMAL.png){#id .class width=400}
 
-![Erro MRU - Alternado](IMAGES/Statistics/ERROS_MRU_ALT.png){#id .class width=350}
+![Erro MRU - Alternado](IMAGES/Statistics/ERROS_MRU_ALT.png){#id .class width=400}
 
 ### 7. Interpretação
 
