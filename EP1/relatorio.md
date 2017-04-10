@@ -1,11 +1,11 @@
 ---
 title:  'Relatório do EP1'
 author:
-- 'Juliano Garcia de Oliveira Nº USP: 9277086'
-- 'João Gabriel Basi Nº USP: 9793801'
-- 'Victor Chiaradia Gramuglia Araujo   Nº USP: 9793756'
 - 'Guilherme Costa Vieira Nº USP: 9790930'
+- 'João Gabriel Basi Nº USP: 9793801'
+- 'Juliano Garcia de Oliveira Nº USP: 9277086'
 - 'Raphael dos Reis Gusmão Nº 9778561'
+- 'Victor Chiaradia Gramuglia Araújo   Nº USP: 9793756'
 geometry: margin=3cm
 date: "10 de Abril, 2017"
 output:
@@ -136,7 +136,7 @@ Segue alguns resultados obtidos usando os dados enviados no arquivo json:
 
 ### 6. Análise
 
-Conforme sera mostrado, em média o erro do programa diminui se houver uma aumento na taxa de amostragem de tempo. Por este motivo, a medição normal (medição dupla do tempo nas posições 10m, 20m e 30m) e a medição alternada (medição única porém nas posições 5m, 10m, 15m, 25m e 30m) possuem erros diferentes. Usando os dados fornecidos no arquivo .json temos:
+Conforme será mostrado, em média o erro do programa diminui se houver um aumento na taxa de amostragem de tempo. Por esse motivo, a medição normal (medição dupla do tempo nas posições 10m, 20m e 30m) e a medição alternada (medição única porém nas posições 5m, 10m, 15m, 25m e 30m) possuem erros diferentes. Usando os dados fornecidos no arquivo .json temos:
 
 ![Erro MRU - Normal](IMAGES/Statistics/ERROS_MRU_NORMAL.png){#id .class width=350}
 
@@ -148,9 +148,9 @@ Conforme sera mostrado, em média o erro do programa diminui se houver uma aumen
 
 ### 7. Interpretação
 
-Com os dados coletados é possivel verificar que o algoritmo escrito consegue simular os movimentos (MRU e MRUV) de forma precisa (erro médio baixo), com isso podemos concluir que o sistema físico analisado não possue variáveis significativas que não foram consideradas no algoritmo (atrito, resistência do ar, etc).
-Na realização do experimento houve problemas para manter a aceleração constante (usamos um metrônomo) e  problemas com os arquivos gerados pelo Physics ToolBox (dois celulares usados não produziram bons arquivos).
-Na criação do algoritmo houve problemas para achar a velocidade inicial no movimento MRUV e certos problemas para plotar o gráfico de maneira satisfatória usando o matplotlib, principalmente relacionado a utilizar eixos secundários em um gráfico, em conjunto com o plot do arquivo csv, em que foram encontrados vários problemas para posicionar a legenda e os eixos secundários.
+Com os dados coletados é possivel verificar que o algoritmo escrito consegue simular os movimentos (MRU e MRUV) de forma precisa (erro médio baixo), com isso podemos concluir que o sistema físico analisado não possui variáveis significativas que não foram consideradas no algoritmo (como atrito, resistência do ar, etc).
+Na realização do experimento houve problemas para manter a aceleração constante (usamos um metrônomo) e problemas com os arquivos gerados pelo Physics ToolBox (dois celulares usados não produziram bons arquivos).
+Já na criação do algoritmo houve problemas para achar a velocidade inicial no movimento MRUV e certos problemas para plotar o gráfico de maneira satisfatória usando a biblioteca matplotlib, principalmente relacionado a utilizar eixos secundários em um gráfico em conjunto com o plot do arquivo csv, em que foram encontrados vários problemas para posicionar a legenda e os eixos secundários.
 
 ### 8. Crítica
 
