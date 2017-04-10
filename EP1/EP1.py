@@ -24,7 +24,7 @@ def main():
         cMRUV += 1 if w.movType == "MRUV" else 0
         mVel += w.getVelocity() if w.movType == "MRU" else 0
         mAcc += w.getAcceleration() if w.movType == "MRUV" else 0
-        #w.plotGraph()
+        w.plotGraph()
         plotInfo(w = w)
 
     mVel /= cMRU
@@ -246,7 +246,7 @@ class Walker:
                 # Plot a CSV in the second axis
                 self.__plotCsv(run, axarr[1])
                 plt.autoscale(False)
-                plt.tight_layout(pad=2, w_pad=0.5, h_pad=5.0)
+                plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
                 # Show the final plot! :)
                 plt.show()
 
