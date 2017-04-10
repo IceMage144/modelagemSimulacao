@@ -121,7 +121,7 @@ Agora considerando alguém que anda com aceleração constante igual a $1 m/s^2$
 ![](IMAGES/figure_Jmru.png)
 ![](IMAGES/figure_Rmruv.png)
 
-### 5. Analise
+### 5. Análise
 
 ### 6. Interpretação
 
