@@ -3,11 +3,9 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from numpy.random import rand
-
-
 
 def main():
+    mVel = mAcc = cMRU = cMRUV = 0
     # Parse a json file passed as argument
     if(len(sys.argv) == 2 and sys.argv[1][-5:] == ".json"):
         data = sys.argv[1]
@@ -22,20 +20,27 @@ def main():
         addWalker(j, listWalkers)
 
     for w in listWalkers:
-        w.plotInfo()
+        cMRU += 1 if w.movType == "MRU" else 0
+        cMRUV += 1 if w.movType == "MRUV" else 0
+        mVel += w.getVelocity() if w.movType == "MRU" else 0
+        mAcc += w.getAcceleration() if w.movType == "MRUV" else 0
         w.plotGraph()
+        plotInfo(w = w)
 
-def addWalker(w, listWalkers):
-    newWalker = Walker(w['walker'], w['movType'], w['times'])
-    listWalkers.append(newWalker)
+    mVel /= cMRU
+    mAcc /= cMRUV
+    plotInfo(cTitle = "Resumo MRU", cMsg = f"Velocidade Média: {round(mVel, 3)}")
+    plotInfo(cTitle = "Resumo MRUV", cMsg = f"Aceleração Média: {round(mAcc, 3)}")
+
 
 class Walker:
     '''
     Walker represents a person's experiment, and it's read from the json.
-        name = the name of the Walker
-        movType = "MRU" ou "MRUV"
-        times = A dict with the movements!
+        -name = the name of the Walker
+        -movType = "MRU" ou "MRUV"
+        -times = A dict with the movements!
     '''
+    # Class variables
     SPACE = 30
     XLIM = 60
 
@@ -43,35 +48,6 @@ class Walker:
         self.name = name
         self.movType = movType
         self.times = times
-
-    def plotInfo(self):
-        plt.cla()
-        plt.clf()
-        plt.close()
-        fig = plt.figure(figsize=(3.3,0.6))
-        fig.suptitle(f"{self.movType} - {self.name}", fontsize=16, fontweight='bold')
-        plt.axis('off')
-        ax = fig.add_subplot(111)
-        ax.axis([0, 10, 0, 10])
-        plt.tight_layout(pad=0.42, w_pad=0.5, h_pad=0.5)
-        if self.movType == "MRU":
-            ax.text(-0.6, -3.5, f'Velocidade média: {round(self.__getVelocity(), 3)} m/s', fontsize=15)
-        else:
-            ax.text(-0.6, -3.5, f'Aceleração média: {round(self.__getAcceleration(), 3)} m/s²', fontsize=15)
-        plt.show()
-
-
-    def __getAcceleration(self):
-        mAcc = [self.__velocityF(run)(1) for run in self.times]
-        return sum(mAcc)/len(mAcc)
-
-    def __getVelocity(self):
-        '''
-        Returns the mean velocity of a Walker in all of his runs!
-        Should only be used with MRU movements!
-        '''
-        mVel = [self.__spaceF(run)(1) for run in self.times]
-        return sum(mVel)/len(mVel)
 
     def __spaceF(self, run):
         '''
@@ -200,6 +176,18 @@ class Walker:
         error = [abs(y - xt(x)) for x, y in  zip(xObs, yObs)]
         return sum(error)/len(error)
 
+    def getAcceleration(self):
+        mAcc = [self.__velocityF(run)(1) for run in self.times]
+        return sum(mAcc)/len(mAcc)
+
+    def getVelocity(self):
+        '''
+        Returns the mean velocity of a Walker in all of his runs!
+        Should only be used with MRU movements!
+        '''
+        mVel = [self.__spaceF(run)(1) for run in self.times]
+        return sum(mVel)/len(mVel)
+
     def plotGraph(self):
         '''
         Plots the full simulation and data of an MRU movement in a matplotlib plot!
@@ -232,7 +220,7 @@ class Walker:
                 axarr[0].spines['top'].set_visible(False)
                 axarr[0].set_xlim(0, self.__finalTime(run) + 1)
                 axarr[0].set_ylim(0, Walker.SPACE + 1)
-                axarr[0].legend(shadow=True)
+                axarr[0].legend(shadow=True, loc ="upper left")
                 # Annotate our plot
                 self.__setAnnotations( xObs = realX, yObs = realY, labels = timeNames,
                     values = realX, error = self.__calculateError(realX, realY, xt),
@@ -302,6 +290,39 @@ class Walker:
             plt.tight_layout(pad=2, w_pad=0.5, h_pad=5.0)
             # Show the final plot! :)
             plt.show()
+
+def plotInfo(w = None, cTitle = "", cMsg = ""):
+    '''
+    Plot a info graphic. If w is a walker, then it plots the respective
+    information:
+        - Mean Velocity
+        - Mean acceleration
+    If it's not a walker, then it just plots the custom message with
+    the custom title sent by the parameters
+    '''
+    plt.cla()
+    plt.clf()
+    plt.close()
+    fig = plt.figure(figsize=(3.3,0.6))
+    plt.axis('off')
+    ax = fig.add_subplot(111)
+    ax.axis([0, 10, 0, 10])
+    plt.tight_layout(pad=0.42, w_pad=0.5, h_pad=0.5)
+    if w != None:
+        fig.suptitle(f"{w.movType} - {w.name}", fontsize=16, fontweight='bold')
+        if w.movType == "MRU":
+            ax.text(-0.6, -3.5, f'Velocidade média: {round(w.getVelocity(), 3)} m/s', fontsize=15)
+        else:
+            ax.text(-0.6, -3.5, f'Aceleração média: {round(w.getAcceleration(), 3)} m/s²', fontsize=15)
+    else:
+        fig.suptitle(cTitle, fontsize=16, fontweight='bold')
+        ax.text(-0.6, -3.5, cMsg, fontsize=15)
+
+    plt.show()
+
+def addWalker(w, listWalkers):
+    newWalker = Walker(w['walker'], w['movType'], w['times'])
+    listWalkers.append(newWalker)
 
 if __name__ == '__main__':
     main()
