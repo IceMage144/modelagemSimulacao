@@ -1,18 +1,18 @@
-import numpy as np
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 
-def main():
-    plt.axis([-50,50,0,10000])
-    plt.ion()
-    plt.show()
+x = y = [1,2,3,4,5]
 
-    x = np.arange(-50, 51)
-    for pow in range(1,5):   # plot x^1, x^2, ..., x^4
-        y = [Xi**pow for Xi in x]
-        plt.plot(x, y)
-        plt.draw()
-        plt.pause(0.001)
-        input("Press [enter] to continue.")
+fig, ax = plt.subplots()
 
-if __name__ == '__main__':
-    main()
+ax.plot(x,y)
+leg = ax.legend(['line 1'], loc="upper left")
+
+plt.draw()
+
+p = leg.get_frame().get_bbox().bounds
+print(p)
+
+ax.annotate('Annotation Text', (p[0] + 3 , p[1] + 3), (p[2] + 3, p[3] + 3),
+            xycoords='figure pixels', zorder=9)
+
+plt.show()
