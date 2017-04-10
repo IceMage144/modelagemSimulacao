@@ -125,6 +125,11 @@ Agora considerando alguém que anda com aceleração constante igual a $1 m/s^2$
 
 ### 6. Interpretação
 
-### 7. Log
+### 7. Crítica
+Em termos técnicos, o grupo adquiriu melhor entendimento sobre orientação a objetos em python, manipulação de estruturas de dados como dicionários e json, aspectos de programação funcional em python (closures, lambdas, função map, etc), a biblioteca gráfica do matplotlib, além de aprender mais sobre a edição de vídeos e efeitos especiais.
+Como um todo, o grupo aprendeu com alguns desafios e a organização de um projeto em equipe. A divisão de tarefas, comunicação interpessoal e trabalhar em conjunto no código, fazendo a análise do experimento e escrevendo o relatório, foram alguns dos aspectos mais importantes que aprendemos neste projeto.
+A simulação e a visualização de conceitos físicos de cinemática foi bastante interessante, o que permitiu um maior entendimento dos conceitos físicos na prática. A definição de um restrito protocolo de aquisição para o experimento, erros de medição, e todos as rotinas para realizar o experimento foram fatores que aprendemos na prática que devem ser muito bem planejados.
+
+### 8. Log
 
 #### Contribuições dos Autores:$\\$
