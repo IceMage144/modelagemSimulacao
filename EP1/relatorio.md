@@ -149,9 +149,7 @@ Conforme será mostrado, em média o erro do programa diminui se houver um aumen
 
 ### 7. Interpretação
 
-Com os dados coletados é possivel verificar que o algoritmo escrito consegue simular os movimentos (MRU e MRUV) de forma precisa (erro médio baixo), com isso podemos concluir que o sistema físico analisado não possui variáveis significativas que não foram consideradas no algoritmo (como atrito, resistência do ar, etc).
-Na realização do experimento houve problemas para manter a aceleração constante (usamos um metrônomo) e problemas com os arquivos gerados pelo Physics ToolBox (dois celulares usados não produziram bons arquivos).
-Já na criação do algoritmo houve problemas para achar a velocidade inicial no movimento MRUV e certos problemas para plotar o gráfico de maneira satisfatória usando a biblioteca matplotlib, principalmente relacionado a utilizar eixos secundários em um gráfico em conjunto com o plot do arquivo csv, em que foram encontrados vários problemas para posicionar a legenda e os eixos secundários.
+Com os dados coletados é possivel verificar que o algoritmo escrito consegue simular os movimentos (MRU e MRUV) de forma precisa (erro médio baixo), com isso podemos concluir que o sistema físico analisado não possui variáveis significativas que não foram consideradas no algoritmo (como atrito, resistência do ar, etc). Em suma, o modelo matemático é uma boa simulação da realidade, no caso do nosso experimento, já que o erro foi bastante baixo e não vimos grande discrepância com o que foi previsto na modelagem matemática e o que foi observado na execução do experimento em si.
 
 ### 8. Crítica
 
@@ -159,11 +157,24 @@ Em termos técnicos, o grupo adquiriu melhor entendimento sobre orientação a o
 Como um todo, o grupo aprendeu com alguns desafios e a organização de um projeto em equipe. A divisão de tarefas, comunicação interpessoal e trabalhar em conjunto no código, fazendo a análise do experimento e escrevendo o relatório, foram alguns dos aspectos mais importantes que aprendemos neste projeto.
 A simulação e a visualização de conceitos físicos de cinemática foi bastante interessante, o que permitiu um maior entendimento das leis físicas. A definição de um restrito protocolo de aquisição para o experimento, erros de medição, e todos as rotinas para realizar o projeto foram fatores que percebemos que devem ser muito bem planejados para obter resultados satisfatórios.
 
+Na realização do experimento houve problemas para manter a aceleração constante (usamos um metrônomo) e problemas com os arquivos gerados pelo Physics ToolBox (dois celulares usados não produziram bons arquivos).
+Já na criação do algoritmo houve problemas para achar a velocidade inicial no movimento MRUV e certos problemas para plotar o gráfico de maneira satisfatória usando a biblioteca matplotlib, principalmente relacionado a utilizar eixos secundários em um gráfico em conjunto com o plot do arquivo csv, em que foram encontrados vários problemas para posicionar a legenda e os eixos secundários.
+
+
 ### 9. Log
 
-* Para a realização do experimento foram nescessárias 5h30m divididas em 2 dias.
-* Para a edição foram 26 horas divididas em 7 dias.
-* Para criação do algoritmo foram nescessárias 28 horas divididas em 5 dias.
-* Para a criação do relatório foram 15 horas divididas em 2 dias.
+- Para a realização do experimento foram nescessárias 5h30m divididas em 2 dias.
+- Para a edição foram 26 horas divididas em 7 dias.
+- Para criação do algoritmo foram nescessárias 28 horas divididas em 5 dias.
+- Para a criação do relatório foram 15 horas divididas em 2 dias.
 
 #### Contribuições dos Autores:$\\$
+
+- Guilherme Costa Vieira: Preparação do experimento, travessia, medição do tempo e relatório;
+- João Gabriel Basi: Preparação do experimento, travessia,  medição do tempo, implementação do programa e relatório;
+- Juliano Garcia de Oliveira: Preparação do experimento, travessia,  medição do tempo, filmagem, implementação do programa e relatório;
+- Raphael dos Reis Gusmão: Travessia, filmagem, edição do vídeo e revisão do relatório;
+- Victor Chiaradia Gramuglia Araújo: Preparação do experimento, travessia, medição do tempo, filmagem e relatório;
+
+#### Agradecimentos$\\$
+- Agradescimento especial para Bernardo Nigri, bacharelando em relações internacionais do IRI-USP, por ajudar na revisão ortográfica e gramatical do texto.
