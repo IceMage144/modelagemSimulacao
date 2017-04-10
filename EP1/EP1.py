@@ -23,9 +23,11 @@ def main():
 
     # TODO: REMOVE this. This calculates the mean velocity of every walker, then plot a graph
     for w in listWalkers:
-        print(f"Mean Velocity ({w.name} - {w.movType}) =  m/s")
-        if(w.movType == "MRUV"):
-            w.plotGraph()
+        print(f"Mean Velocity ({w.name} - {w.movType})")
+        if(w.movType == "MRU"):
+            print(f" --> {w.getVelocity()}")
+        w.plotInfo()
+        w.plotGraph()
 
 def addWalker(w, listWalkers):
     newWalker = Walker(w['walker'], w['movType'], w['times'])
@@ -46,34 +48,30 @@ class Walker:
         self.movType = movType
         self.times = times
 
+    def plotInfo(self):
+        plt.cla()
+        plt.clf()
+        plt.close()
+        fig = plt.figure(figsize=(3.3,0.6))
+        fig.suptitle(f"{self.movType} - {self.name}", fontsize=16, fontweight='bold')
+        plt.axis('off')
+        if self.movType == "MRU":
+            ax = fig.add_subplot(111)
+            ax.text(-0.6, -3.5, f'Velocidade média: {round(self.getVelocity(), 3)} m/s', fontsize=15)
+            ax.axis([0, 10, 0, 10])
+            plt.tight_layout(pad=0.42, w_pad=0.5, h_pad=0.5)
+            plt.show()
 
-    def getVelocity(self):
+    def __getVelocity(self):
         '''
         Returns the mean velocity of a Walker in all of his runs!
         Should only be used with MRU movements!
         '''
         if self.movType != "MRU":
             raise ValueError("getVelocity(): You can't get MRUV mean velocity!")
-        meanVel = sum((self.__calculateVelocity(run) for run in self.times))/len(self.times)
-        return meanVel
-
-    def __calculateVelocity(self, run):
-        '''
-        Calculate the mean Velocity of a given run, should only be
-        used with MRU movements.
-        '''
-        #TODO: Modify so that the simulated mean velocity uses the CSV final time.
-        #TODO: Probably this will be removed!!
-        msr = [float(m) for m in run['measures'].split("|") if m != '']
-        # Alternate measure
-        if(run['mType'] == 'A'):
-            return sum((i/t for i, t in zip(range(5, 31, 5), msr)))/len(msr)
-        else:
-            # Takes the mean of both time measures of the same pos
-            msr = [(i+j)/2 for i, j in zip(msr[:len(msr)//2],msr[len(msr)//2:])]
-            # Makes deltaS/deltaT for every t and space, then takes the mean
-            #print (sum((i/t for i, t in zip(range(10, 31, 10), msr)))/len(msr))
-            return sum((i/t for i, t in zip(range(10, 31, 10), msr)))/len(msr)
+        mVel = [Walker.SPACE/self.__finalTime(run) for run in self.times]
+        mVel = sum(mVel)/len(mVel)
+        return mVel
 
     def __spaceF(self, run):
         '''
@@ -84,21 +82,15 @@ class Walker:
         '''
         if self.movType == "MRU":
             simVel = Walker.SPACE/self.__finalTime(run)
-            def f(t):
-                return simVel*t
+            return lambda t: simVel*t
         else:
-            if(run["mType"] == "N"):
-                vm = 10/self.__timeList(run)[0]
             simAccel = 2*Walker.SPACE/self.__finalTime(run)**2
-            def f(t):
-                return simAccel*t**2/2
+            return lambda t: simAccel*t**2/2
         return f
 
     def __velocityF(self, run):
         simAccel = 2*Walker.SPACE/self.__finalTime(run)**2
-        def f(t):
-            return simAccel*t
-        return f
+        return lambda t:simAccel*t
 
     def __timeList(self, run):
         '''
@@ -149,7 +141,6 @@ class Walker:
         axis.axis('off')
         axis.legend(loc='upper left')
         axis.set_xlim(0, np.max(np.asarray(df['Tempo'])))
-
 
     def __setAnnotations(self, **kwargs):
         '''
@@ -256,6 +247,7 @@ class Walker:
                 # Plot a CSV in the second axis
                 self.__plotCsv(run, axarr[1])
                 plt.autoscale(False)
+                plt.tight_layout(pad=2, w_pad=0.5, h_pad=5.0)
                 # Show the final plot! :)
                 plt.show()
 
@@ -311,8 +303,6 @@ class Walker:
                 plt.tight_layout(pad=2, w_pad=0.5, h_pad=5.0)
                 # Show the final plot! :)
                 plt.show()
-
-
 
 if __name__ == '__main__':
     main()
