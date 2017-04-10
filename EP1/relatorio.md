@@ -8,6 +8,12 @@ author:
 - 'Raphael dos Reis Gusmão Nº 9778561'
 geometry: margin=3cm
 date: "10 de Abril, 2017"
+output:
+  rmarkdown::pdf_document:
+    fig_caption: yes        
+    includes:  
+      in_header: figure_placement.tex
+
 ---
 [//]: # (Gerando PDF usando pandoc (no terminal): pandoc -s -o teste.pdf relatorio.md)
 [//]: # (ESTE É UM COMENTÁRIO : Versão inicial do relatório!)
@@ -39,10 +45,6 @@ Como cada pessoa pode realizar dois tipos de travessias distintas (MRU E MRUV), 
 Após a leitura dos dados, calcula-se a velocidade média (caso a travessia atual seja do tipo MRU) ou a aceleração média (tipo MRUV) para cada indivíduo durante sua respectiva travessia. Assim sendo, o programa simula o movimento da travessia de cada indivíduo utilizando as equações analíticas do respectivo movimento.
 
 Como está descrito na especificação do EP1, nós utilizamos os dados de tempo capturados pelo acelerômetro para fazer as simulações no programa.
-
-$\\$
-$\\$
-$\\$
 
 Então, plota-se:
 
@@ -92,9 +94,6 @@ Abaixo está um exemplo de entrada no formato *json*:
 
 O programa utiliza o paradigma de orientação à objetos pois é vantajoso tratar cada indivíduo que realizou o experimento como um objeto, visto que aplicam-se operações similares a todos eles. Dessa forma, a reusabilidade de código é favorecida com essa escolha.
 
-$\\$
-$\\$
-
 A classe Walker modela o indivíduo que realizou o experimento. Abaixo há uma representação geral desta classe usando UML:
 
 ![Classe Walker](IMAGES/umlclass.png){#id .class width=220}
@@ -128,10 +127,12 @@ Agora considerando alguém que anda com aceleração constante igual a $1 m/s^2$
 
 Segue alguns resultados obtidos usando os dados enviados no arquivo json:
 
-![](IMAGES/figure_GMRUV.png)
-![](IMAGES/figure_JJmru.png)
-![](IMAGES/figure_Jmru.png)
-![](IMAGES/figure_Rmruv.png)
+![MRUV - Guilherme](IMAGES/figure_GMRUV.png){#id .class width=600}
+![MRU - João](IMAGES/figure_JJmru.png){#id .class width=600}
+
+![MRU com CSV - Juliano](IMAGES/figure_Jmru.png){#id .class width=450 height=450}
+
+![MRUV com CSV - Raphael](IMAGES/figure_Rmruv.png){#id .class width=450 height=450}
 
 ### 6. Análise
 
