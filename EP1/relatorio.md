@@ -20,9 +20,17 @@ O experimento é um estudo do movimento retilíneo uniforme (MRU) e movimento re
 
 Com esse experimento espera-se observar as semelhanças e diferenças (erros) entre a simulação analítica do MRU e MRUV, e comparar com o que foi obtido manualmente na prática do experimento.
 
-### 2. Método
+### 2. Experimento
 
-####2.1 Descrição do algoritmo
+Para realizar o experimento da travessia conforme proposto pela descrição, foi necessário decidir a forma na qual movimentos seriam feitos. Pensou-se em utilizar as esteiras do metrô Consolação na captura dos tempos do movimento constante, uma vez que cada uma delas tem 48 metros e mantém velocidade constante enquanto estão em movimento. Entretanto, o receio de causar alguma reação negativa nos funcionários do metrô fez com que a ideia fosse descartada. Utilizar uma bicicleta desacelerando para o movimento uniformemente variado também foi outra ideia para executar o movimento, porém não foi possível deslocar uma bicicleta para tal.
+
+Para o movimento retilínio uniforme, optou-se por traçar linhas a cada 0,5m por todo o percurso de 30 metros a ser percorrido e assim, o indívuo que caminhava pôde manter seus passos uniformes. Mas não utlizou-se metrônomo para controlar o ritmo dos passos nesse caso, pois a contagem mental mostrou-se eficiente. Já para o movimento retilínio uniformemente variado, além das linhas utilizou-se o auxílio de uma metrônomo acelerado.
+
+Foi necessário repetir o experimento no dia seguinte após sua realização, pois alguns arquivos .csv com os dados do acelerômetro capturados pelo aplicativo Physics Tool Box estavam com taxa de amostragem muito discrepantes entre si devido as diferenças entre os aparelhos celulares. Esse erro foi corrigido utilizando o mesmo aparelho para gravar os dados do sensor.
+
+### 3. Método
+
+####3.1 Descrição do algoritmo
 
 O programa EP1 tem como objetivo receber dados do experimento da travessia de forma genérica, ou seja, o programa deve calcular as estatísticas de quaisquer entrada de dados, independentemente da quantidade de travessias realizadas. Entretanto, o programa deve admitir como padrão uma travessia de 30 metros.
 
@@ -53,7 +61,8 @@ Se MRUV:
 - Gráfico dos dados obtidos pelo acelerômetro;
 - Erro entre a simulação e o experimento real.
 
-####2.2 Implementação do algoritmo
+####3.2 Implementação do algoritmo
+
 Python 3.6 foi usado para a criação do código pois é a versão mais atualizada da linguagem e ele possui f-strings (formatted strings literals) que facilita a formatação de strings para exibir nos gráficos do programa.
 A notação JSON (JavaScript Object Notation), por ser fácil de ler e escrever para seres humanos, apresenta-se como um bom formato para a leitura dos dados. Além disso é uma formatação leve para as máquinas interpretarem e isso justifica sua escolha como formato de entrada para esse programa.
 
@@ -104,7 +113,8 @@ Recebe como argumento as variáveis *"walker"*, *"movType"* e *"Times"*, present
 
 - *plotInfo()*: Plota uma pequena janela que possui  o nome da pessoa que realizou o experimento, o tipo de movimento (MRU ou MRUV) e a velocidade média/aceleração média de todas as travessias da pessoa, caso receba um *Walker* como argumento. Senão, escreve a mensagem e o título recebidos como *keyword argument*.
 
-###3. Verificação do Programa
+###4. Verificação do Programa
+
 Devido a simplicidade dos movimentos simulados, o fato do protocolo de aquisição dos dados ser bem definido, o experimento ser bem controlado e algumas considerações feitas no algoritmo (comprimento do percurso igual a trinta metros, por exemplo), não há casos especiais que possam ser analisados.
 
 Considerando um indivíduo com velocidade constante igual a $1 m/s$, usando a equação $s = v \cdot t$, essa pessoa leva 10 segundos para atingir a posição de 10 metros, 20 segundos para atingir a posição de 20 metros e 30 segundos para atingir a posição de 30 metros.
@@ -114,7 +124,8 @@ Agora considerando alguém que anda com aceleração constante igual a $1 m/s^2$
 
 ![Simulação - MRUV](IMAGES/simula2.png){#id .class width=400}
 
-### 4. Dados
+### 5. Dados
+
 Segue alguns resultados obtidos usando os dados enviados no arquivo json:
 
 ![](IMAGES/figure_GMRUV.png)
@@ -122,7 +133,8 @@ Segue alguns resultados obtidos usando os dados enviados no arquivo json:
 ![](IMAGES/figure_Jmru.png)
 ![](IMAGES/figure_Rmruv.png)
 
-### 5. Análise
+### 6. Análise
+
 Conforme sera mostrado, em média o erro do programa diminui se houver uma aumento na taxa de amostragem de tempo. Por este motivo, a medição normal (medição dupla do tempo nas posições 10m, 20m e 30m) e a medição alternada (medição única porém nas posições 5m, 10m, 15m, 25m e 30m) possuem erros diferentes. Usando os dados fornecidos no arquivo .json temos:
 
 ![Erro MRU - Normal](IMAGES/Statistics/ERROS_MRU_NORMAL.png){#id .class width=350}
@@ -133,15 +145,23 @@ Conforme sera mostrado, em média o erro do programa diminui se houver uma aumen
 
 ![Erro MRU - Alternado](IMAGES/Statistics/ERROS_MRU_ALT.png){#id .class width=350}
 
-### 6. Interpretação
+### 7. Interpretação
+
 Com os dados coletados é possivel verificar que o algoritmo escrito consegue simular os movimentos (MRU e MRUV) de forma precisa (erro médio baixo), com isso podemos concluir que o sistema físico analisado não possue variáveis significativas que não foram consideradas no algoritmo (atrito, resistência do ar, etc).
 Na realização do experimento houve problemas para manter a aceleração constante (usamos um metrônomo) e  problemas com os arquivos gerados pelo Physics ToolBox (dois celulares usados não produziram bons arquivos).
 Na criação do algoritmo houve problemas para achar a velocidade inicial no movimento MRUV e certos problemas para plotar o gráfico de maneira satisfatória usando o matplotlib, principalmente relacionado a utilizar eixos secundários em um gráfico, em conjunto com o plot do arquivo csv, em que foram encontrados vários problemas para posicionar a legenda e os eixos secundários.
-### 7. Crítica
+
+### 8. Crítica
+
 Em termos técnicos, o grupo adquiriu melhor entendimento sobre orientação a objetos e aspectos de programação funcional em python (closures, lambdas, função map, etc), manipulação de estruturas de dados como dicionários e json, a biblioteca gráfica do matplotlib, além de aprender mais sobre a edição de vídeos e efeitos especiais.
 Como um todo, o grupo aprendeu com alguns desafios e a organização de um projeto em equipe. A divisão de tarefas, comunicação interpessoal e trabalhar em conjunto no código, fazendo a análise do experimento e escrevendo o relatório, foram alguns dos aspectos mais importantes que aprendemos neste projeto.
 A simulação e a visualização de conceitos físicos de cinemática foi bastante interessante, o que permitiu um maior entendimento das leis físicas. A definição de um restrito protocolo de aquisição para o experimento, erros de medição, e todos as rotinas para realizar o projeto foram fatores que percebemos que devem ser muito bem planejados para obter resultados satisfatórios.
 
-### 8. Log
+### 9. Log
+
+* Para a realização do experimento foram nescessárias 5h30m divididas em 2 dias.
+* Para a edição foram 26 horas divididas em 7 dias.
+* Para criação do algoritmo foram nescessárias 28 horas divididas em 5 dias.
+* Para a criação do relatório foram 15 horas divididas em 2 dias.
 
 #### Contribuições dos Autores:$\\$
