@@ -54,7 +54,7 @@ Se MRUV:
 - Erro entre a simulação e o experimento real.
 
 ####2.2 Implementação do algoritmo
-
+Python 3.6 foi usado para a criação do código pois é a versão mais atualizada da linguagem e ele possui f-strings (formatted strings literals) que facilita a formatação de strings para exibir nos gráficos do programa.
 A notação JSON (JavaScript Object Notation), por ser fácil de ler e escrever para seres humanos, apresenta-se como um bom formato para a leitura dos dados. Além disso é uma formatação leve para as máquinas interpretarem e isso justifica sua escolha como formato de entrada para esse programa.
 
 O programa recebe um arquivo *.json* com os dados do experimento realizado. O arquivo contém um vetor na qual os elementos são vetores e cada um destes possui as seguintes informações:
@@ -134,7 +134,9 @@ Conforme sera mostrado, em média o erro do programa diminui se houver uma aumen
 ![Erro MRU - Alternado](IMAGES/Statistics/ERROS_MRU_ALT.png){#id .class width=350}
 
 ### 6. Interpretação
-
+Com os dados coletados é possivel verificar que o algoritmo escrito consegue simular os movimentos (MRU e MRUV) de forma precisa (erro médio baixo), com isso podemos concluir que o sistema físico analisado não possue variáveis significativas que não foram consideradas no algoritmo (atrito, resistência do ar, etc).
+Na realização do experimento houve problemas para manter a aceleração constante (usamos um metrônomo) e  problemas com os arquivos gerados pelo Physics ToolBox (dois celulares usados não produziram bons arquivos).
+Na criação do algoritmo houve problemas para achar a velocidade inicial no movimento MRUV e certos problemas para plotar o gráfico de maneira satisfatória usando o matplotlib, principalmente relacionado a utilizar eixos secundários em um gráfico, em conjunto com o plot do arquivo csv, em que foram encontrados vários problemas para posicionar a legenda e os eixos secundários.
 ### 7. Crítica
 Em termos técnicos, o grupo adquiriu melhor entendimento sobre orientação a objetos e aspectos de programação funcional em python (closures, lambdas, função map, etc), manipulação de estruturas de dados como dicionários e json, a biblioteca gráfica do matplotlib, além de aprender mais sobre a edição de vídeos e efeitos especiais.
 Como um todo, o grupo aprendeu com alguns desafios e a organização de um projeto em equipe. A divisão de tarefas, comunicação interpessoal e trabalhar em conjunto no código, fazendo a análise do experimento e escrevendo o relatório, foram alguns dos aspectos mais importantes que aprendemos neste projeto.
