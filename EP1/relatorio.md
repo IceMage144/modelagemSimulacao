@@ -116,22 +116,25 @@ Agora considerando alguém que anda com aceleração constante igual a $1 m/s^2$
 
 ### 4. Dados
 Segue alguns resultados obtidos usando os dados enviados no arquivo json:
+
 ![](IMAGES/figure_GMRUV.png)
 ![](IMAGES/figure_JJmru.png)
 ![](IMAGES/figure_Jmru.png)
 ![](IMAGES/figure_Rmruv.png)
 
-<<<<<<< HEAD
-### 5. Analise
-Conforme sera mostrado, em média o erro do programa diminui se houver uma aumento na taxa de amostragem de tempo. Usando os dados fornecidos no arquivo .josn temos:
-![](IMAGES/Statitcs/ERROS MRU NORMAL.png)
-![](IMAGES/Statitcs/ERROS MRU ALT.png)
-![](IMAGES/Statitcs/ERROS MRUV NORMAL.png)
-![](IMAGES/Statitcs/ERROS MRU ALT.png)
-=======
+### 5. Análise
+Conforme sera mostrado, em média o erro do programa diminui se houver uma aumento na taxa de amostragem de tempo. Por este motivo, a medição normal (medição dupla do tempo nas posições 10m, 20m e 30m) e a medição alternada (medição única porém nas posições 5m, 10m, 15m, 25m e 30m) possuem erros diferentes. Usando os dados fornecidos no arquivo .json temos:
+
+![Erro MRU - Normal](IMAGES/Statistics/ERROS_MRU_NORMAL.png){#id .class width=350}
+
+![Erro MRU - Alternado](IMAGES/Statistics/ERROS_MRU_ALT.png){#id .class width=350}
+
+![Erro MRU - Normal](IMAGES/Statistics/ERROS_MRUV_NORMAL.png){#id .class width=350}
+
+![Erro MRU - Alternado](IMAGES/Statistics/ERROS_MRU_ALT.png){#id .class width=350}
+
 ### 5. Análise
 
->>>>>>> ad633d8b256e93e8639b8859ee1b4bb4606020ff
 ### 6. Interpretação
 
 ### 7. Crítica
