@@ -88,7 +88,7 @@ $\\$
 
 A classe Walker modela o indivíduo que realizou o experimento. Abaixo há uma representação geral desta classe usando UML:
 
-![Classe Walker](umlclass.png){#id .class width=220}
+![Classe Walker](IMAGES/umlclass.png){#id .class width=220}
 
 Recebe como argumento as variáveis *"walker"*, *"movType"* e *"Times"*, presentes no arquivo de entrada JSON. Seus métodos públicos são:
 
@@ -110,11 +110,16 @@ Devido a simplicidade dos movimentos simulados, o fato do protocolo de aquisiç�
 Considerando um indivíduo com velocidade constante igual a $1 m/s$, usando a equação $s = v \cdot t$, essa pessoa leva 10 segundos para atingir a posição de 10 metros, 20 segundos para atingir a posição de 20 metros e 30 segundos para atingir a posição de 30 metros.
 Agora considerando alguém que anda com aceleração constante igual a $1 m/s^2$ e possui velocidade inicial igual a 0m/s, em 4.472 segundos ela passa pela posição de 10 metros, em 6.324 segundos ela passa pela posição de 20 metros e em 7.745 segundos ela passa pela posição de 30 metros. Seguem os gráficos obtidos com essas entradas:
 
-![Simulação - MRU](simula1.png){#id .class width=400}
+![Simulação - MRU](IMAGES/simula1.png){#id .class width=400}
 
-![Simulação - MRUV](simula2.png){#id .class width=400}
+![Simulação - MRUV](IMAGES/simula2.png){#id .class width=400}
 
 ### 4. Dados
+
+![](IMAGES/figure_GMRUV.png)
+![](IMAGES/figure_JJmru.png)
+![](IMAGES/figure_Jmru.png)
+![](IMAGES/figure_Rmruv.png)
 
 ### 5. Analise
 
