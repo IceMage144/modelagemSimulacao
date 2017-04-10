@@ -133,8 +133,6 @@ Conforme sera mostrado, em média o erro do programa diminui se houver uma aumen
 
 ![Erro MRU - Alternado](IMAGES/Statistics/ERROS_MRU_ALT.png){#id .class width=350}
 
-### 5. Análise
-
 ### 6. Interpretação
 
 ### 7. Crítica
