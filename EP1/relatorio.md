@@ -121,12 +121,17 @@ Segue alguns resultados obtidos usando os dados enviados no arquivo json:
 ![](IMAGES/figure_Jmru.png)
 ![](IMAGES/figure_Rmruv.png)
 
+<<<<<<< HEAD
 ### 5. Analise
 Conforme sera mostrado, em média o erro do programa diminui se houver uma aumento na taxa de amostragem de tempo. Usando os dados fornecidos no arquivo .josn temos:
 ![](IMAGES/Statitcs/ERROS MRU NORMAL.png)
 ![](IMAGES/Statitcs/ERROS MRU ALT.png)
 ![](IMAGES/Statitcs/ERROS MRUV NORMAL.png)
 ![](IMAGES/Statitcs/ERROS MRU ALT.png)
+=======
+### 5. Análise
+
+>>>>>>> ad633d8b256e93e8639b8859ee1b4bb4606020ff
 ### 6. Interpretação
 
 ### 7. Crítica
