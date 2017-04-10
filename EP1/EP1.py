@@ -120,6 +120,7 @@ class Walker:
         return fTime
 
     def __plotCsv(self, run, axis):
+        return True
         '''
         Receives a run, and plot the CSV in a given axis!
         It removes labels, set a xlim, and add legend.
@@ -287,7 +288,7 @@ class Walker:
             plt.setp(ax1.get_xticklabels(), visible=True)
             plt.setp(ax1.xaxis.get_label(), visible=True)
             plt.autoscale(False)
-            plt.tight_layout(pad=2, w_pad=0.5, h_pad=5.0)
+            plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
             # Show the final plot! :)
             plt.show()
 
