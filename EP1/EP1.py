@@ -24,13 +24,13 @@ def main():
         cMRUV += 1 if w.movType == "MRUV" else 0
         mVel += w.getVelocity() if w.movType == "MRU" else 0
         mAcc += w.getAcceleration() if w.movType == "MRUV" else 0
-        w.plotGraph()
+        #w.plotGraph()
         plotInfo(w = w)
 
     mVel /= cMRU
     mAcc /= cMRUV
-    plotInfo(cTitle = "Resumo MRU", cMsg = f"Velocidade Média: {round(mVel, 3)}")
-    plotInfo(cTitle = "Resumo MRUV", cMsg = f"Aceleração Média: {round(mAcc, 3)}")
+    plotInfo(cTitle = "Resumo MRU", cMsg = f"Velocidade Média: {round(mVel, 3)} m/s")
+    plotInfo(cTitle = "Resumo MRUV", cMsg = f"Aceleração Média: {round(mAcc, 3)} m/s²")
 
 
 class Walker:
