@@ -49,6 +49,26 @@ class Walker:
         self.movType = movType
         self.times = times
 
+    def __estimateIniVel(self, run):
+        '''
+        Solves the sistem of equations
+        ┌ a*t1^2 + b*t1 = s1
+        ┤
+        └ a*t2^2 + b*t2 = s2
+        for a given run, finds the values for a and b,
+        and returns the value of b
+        '''
+        times = self.__timeList(run)
+        t1 = times[0]
+        t2 = times[-1]
+        s1 = 10 if run["mType"] == "N" else 5
+        s2 = 30
+        print(t1, t2, s1, s2)
+        a = (s2*t1-s1*t2)/(t1*t2*(t2-t1))
+        b = (s2-a*t2**2)/t2
+        print(run["csv"] + " => {}".format(b))
+        return b
+
     def __spaceF(self, run):
         '''
         Calculates a space funtion of a run. A space function f(t)
@@ -61,14 +81,14 @@ class Walker:
             simVel = Walker.SPACE/tf
             return lambda t: simVel*t
         else:
-            v0 = 0.5
+            v0 = self.__estimateIniVel(run)
             simAccel = 2*(Walker.SPACE-v0*tf)/tf**2
             return lambda t: v0*t + simAccel*t**2/2
         return f
 
     def __velocityF(self, run):
         tf = self.__finalTime(run)
-        v0 = 0.5
+        v0 = self.__estimateIniVel(run)
         simAccel = 2*(Walker.SPACE-v0*tf)/tf**2
         return lambda t:simAccel*t
 
@@ -97,8 +117,6 @@ class Walker:
         return [spcList, xticks]
 
     def __finalTime(self, run):
-        old = self.__timeList(run)
-        old = old[len(old) - 1]
         fTime = run["tcsv"][1] - run["tcsv"][0]
         # Semantic way of getting the final time...
         return fTime
