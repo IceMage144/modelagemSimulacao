@@ -18,7 +18,7 @@ O EP1 consiste em realizar um experimento já feito em sala, do início ao fim. 
 
 O experimento é um estudo do movimento retilíneo uniforme (MRU) e movimento retilínio uniformemente variado (MRUV), observando a movimentação dos integrantes do grupo em um espaço controlado, usando sensores do celular em conjunto com a medição do tempo usando cronômetros.
 
-Com esse experimento espera-se observar as semelhanças e diferenças (erros) entre a análise analítica do MRU e MRUV, e comparar com o que foi obtido manualmente na prática do experimento.
+Com esse experimento espera-se observar as semelhanças e diferenças (erros) entre a simulação analítica do MRU e MRUV, e comparar com o que foi obtido manualmente na prática do experimento.
 
 ### 2. Método
 
