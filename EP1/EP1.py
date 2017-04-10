@@ -80,16 +80,20 @@ class Walker:
 
         Note that this returns a closure.
         '''
+        tf = self.__finalTime(run)
         if self.movType == "MRU":
-            simVel = Walker.SPACE/self.__finalTime(run)
+            simVel = Walker.SPACE/tf
             return lambda t: simVel*t
         else:
-            simAccel = 2*Walker.SPACE/self.__finalTime(run)**2
-            return lambda t: simAccel*t**2/2
+            v0 = 0.5
+            simAccel = 2*(Walker.SPACE-v0*tf)/tf**2
+            return lambda t: v0*t + simAccel*t**2/2
         return f
 
     def __velocityF(self, run):
-        simAccel = 2*Walker.SPACE/self.__finalTime(run)**2
+        tf = self.__finalTime(run)
+        v0 = 0.5
+        simAccel = 2*(Walker.SPACE-v0*tf)/tf**2
         return lambda t:simAccel*t
 
     def __timeList(self, run):
