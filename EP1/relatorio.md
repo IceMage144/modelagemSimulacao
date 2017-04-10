@@ -66,8 +66,12 @@ A class Walker modela o indiviíduo que realizou o experimento. Recebe como argu
  * plot.graph(): Plota um gráfico relevante para cada travessia:
     * No caso do movimento ser do tipo MRU, usando a equação s = v * t, v sendo a velocidade média da travessia e t o tempo total que ela levou. Uma simulação do movimento é feita e seu gráfico Espaço x Tempo é plotado e, junto com ele, os pontos coletados no experimento, o erro (a média da diferença entre os tempos simulados e obeservados) e o gráfico dos dados obtidos pelo acelerômetro.
     * No caso do movimento ser do tipo MRUV, utiliza-se as equações s = (a * t**2)/2, e v = a * t para simular o movimento e plotar o gráfico Espaço x Tempo e Velocidade x Tempo. Além disso, plota-se a aceleração média, os dados obtidos no experimento, o erro (a média da diferença entre os tempos simulados e observados) e em baixo, os dados obtidos pelo acelerômetro.
-
+protocolo de aquisição/experimento bem controlado
 ### 3. Verificação do Programa
+Devido a simplicidade dos movimentos simulados, o fato do protocolo de aquisição dos dados ser bem definido, o experimento ser bem controlado e algumas considerações feitas no algoritmo (velocidade inicial igual a zero e comprimento do percurso igual a trinta metros), não há casos especiais que possam ser analisados.
+
+Considerando um indivíduo com velocidade constante igual a 1 m/s, usando a equação s = v * t, essa pessoa leva 10 segundos para atingir a posição de 10 metros, 20 segundos para atingir a posição de 20 metros e 30 segundos para atingir a posição de 30 metros.
+Agora considerando alguém que anda com aceleração constante igual a 1 m/(s**2) e possui velocidade inicial igual a 0m/s, em 4.472 segundos ela passa pela posição de 10 metros, em 6.324 segundos ela passa pela posição de 20 metros e em 7.745 segundos ela passa pela posição de 30 metros. Seguem os gráficos obtidos com essas entradas:
 
 ### 4. Dados
 
