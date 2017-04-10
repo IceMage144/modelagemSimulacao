@@ -198,7 +198,7 @@ class Walker:
 
     def plotGraph(self):
         '''
-        Plots the full simulation and data in a matplotlib plot!
+        Plots the full simulation and data of an MRU movement in a matplotlib plot!
         '''
         if self.movType == "MRU":
             for run in self.times:
@@ -241,57 +241,63 @@ class Walker:
                 plt.show()
 
         else:
-            for run in self.times:
-                # Simulated: st - space Function , vt - velocity function
-                #            (xspa, y1) - simulated space graph, (xvel, y2) - simulated velocity graph
-                st = self.__spaceF(run)
-                vt = self.__velocityF(run)
-                xspa = np.arange(0, Walker.XLIM, 0.01)
-                xvel = np.asarray([0, Walker.XLIM])
-                y1 = list(map(st, xspa))
-                y2 = list(map(vt, xvel))
-                # Observed: (realX, realY) observed points in action!
-                realX = self.__timeList(run)
-                realY = self.__spaceList(run)[0]
-                # Labels and Xticks
-                timeNames = self.__spaceList(run)[1]
-                xticks = [int(i) for i in np.arange(0, self.__finalTime(run), 5)]
-                labels = [str(i) for i in xticks]
-                # Create the plot, and do matplotlib stuff
-                f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
-                ax1 = axarr[0]
-                ax2 = ax1.twinx()
-                ax3 = axarr[1]
-                ax1.plot(xspa, y1, label="espaço simulado")
-                for i, j in zip(realX, realY):
-                    ax1.plot([i, i], [0, j], 'r--')
-                ax1.scatter(realX, realY,color='red', marker="+", label="observado")
-                ax1.set_xlabel('tempo (s)', fontsize=13)
-                ax1.set_ylabel('espaço (m)', fontsize=13)
-                ax1.set_title(self.movType+" - "+run["csv"], fontsize=16, color="#000c3d")
-                ax1.set_xticks(xticks)
-                ax1.set_xticklabels(labels)
-                ax1.set_xlim(0, self.__finalTime(run) + 1)
-                ax1.set_ylim(0, Walker.SPACE + 1)
-                ax1.plot(0, 0,  'g-', label="velocidade simulada")
-                ax1.tick_params('y', colors='b')
-                ax2.plot(xvel, y2, 'g-')
-                ax1.legend(shadow=True, loc = "upper left")
-                ax2.set_ylabel('velocidade (m/s)', fontsize=13)
-                ax2.set_ylim(0, vt(self.__finalTime(run)) + 1)
-                ax2.tick_params('y', colors='g')
-                ft = self.__finalTime(run)
-                # Annotate our plot
-                self.__setAnnotations(xObs = realX, yObs = realY, labels = timeNames,
-                    values = realX, error = self.__calculateError(realX, realY, st),
-                    mean = round(vt(1), 3), ax = ax1)
-                self.__plotCsv(run, ax3)
-                plt.setp(ax1.get_xticklabels(), visible=True)
-                plt.setp(ax1.xaxis.get_label(), visible=True)
-                plt.autoscale(False)
-                plt.tight_layout(pad=2, w_pad=0.5, h_pad=5.0)
-                # Show the final plot! :)
-                plt.show()
+            self.__plotGraphMRUV()
+
+    def __plotGraphMRUV(self):
+        '''
+        Plots the full simulation and data of an MRUV movement in a matplotlib plot!
+        '''
+        for run in self.times:
+            # Simulated: st - space Function , vt - velocity function
+            #            (xspa, y1) - simulated space graph, (xvel, y2) - simulated velocity graph
+            st = self.__spaceF(run)
+            vt = self.__velocityF(run)
+            xspa = np.arange(0, Walker.XLIM, 0.01)
+            xvel = np.asarray([0, Walker.XLIM])
+            y1 = list(map(st, xspa))
+            y2 = list(map(vt, xvel))
+            # Observed: (realX, realY) observed points in action!
+            realX = self.__timeList(run)
+            realY = self.__spaceList(run)[0]
+            # Labels and Xticks
+            timeNames = self.__spaceList(run)[1]
+            xticks = [int(i) for i in np.arange(0, self.__finalTime(run), 5)]
+            labels = [str(i) for i in xticks]
+            # Create the plot, and do matplotlib stuff
+            f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
+            ax1 = axarr[0]
+            ax2 = ax1.twinx()
+            ax3 = axarr[1]
+            ax1.plot(xspa, y1, label="espaço simulado")
+            for i, j in zip(realX, realY):
+                ax1.plot([i, i], [0, j], 'r--')
+            ax1.scatter(realX, realY,color='red', marker="+", label="observado")
+            ax1.set_xlabel('tempo (s)', fontsize=13)
+            ax1.set_ylabel('espaço (m)', fontsize=13)
+            ax1.set_title(self.movType+" - "+run["csv"], fontsize=16, color="#000c3d")
+            ax1.set_xticks(xticks)
+            ax1.set_xticklabels(labels)
+            ax1.set_xlim(0, self.__finalTime(run) + 1)
+            ax1.set_ylim(0, Walker.SPACE + 1)
+            ax1.plot(0, 0,  'g-', label="velocidade simulada")
+            ax1.tick_params('y', colors='b')
+            ax2.plot(xvel, y2, 'g-')
+            ax1.legend(shadow=True, loc = "upper left")
+            ax2.set_ylabel('velocidade (m/s)', fontsize=13)
+            ax2.set_ylim(0, vt(self.__finalTime(run)) + 1)
+            ax2.tick_params('y', colors='g')
+            ft = self.__finalTime(run)
+            # Annotate our plot
+            self.__setAnnotations(xObs = realX, yObs = realY, labels = timeNames,
+                values = realX, error = self.__calculateError(realX, realY, st),
+                mean = round(vt(1), 3), ax = ax1)
+            self.__plotCsv(run, ax3)
+            plt.setp(ax1.get_xticklabels(), visible=True)
+            plt.setp(ax1.xaxis.get_label(), visible=True)
+            plt.autoscale(False)
+            plt.tight_layout(pad=2, w_pad=0.5, h_pad=5.0)
+            # Show the final plot! :)
+            plt.show()
 
 if __name__ == '__main__':
     main()
