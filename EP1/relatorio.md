@@ -115,20 +115,24 @@ Agora considerando alguém que anda com aceleração constante igual a $1 m/s^2$
 ![Simulação - MRUV](IMAGES/simula2.png){#id .class width=400}
 
 ### 4. Dados
-
+Segue alguns resultados obtidos usando os dados enviados no arquivo json:
 ![](IMAGES/figure_GMRUV.png)
 ![](IMAGES/figure_JJmru.png)
 ![](IMAGES/figure_Jmru.png)
 ![](IMAGES/figure_Rmruv.png)
 
 ### 5. Analise
-
+Conforme sera mostrado, em média o erro do programa diminui se houver uma aumento na taxa de amostragem de tempo. Usando os dados fornecidos no arquivo .josn temos:
+![](IMAGES/Statitcs/ERROS MRU NORMAL.png)
+![](IMAGES/Statitcs/ERROS MRU ALT.png)
+![](IMAGES/Statitcs/ERROS MRUV NORMAL.png)
+![](IMAGES/Statitcs/ERROS MRU ALT.png)
 ### 6. Interpretação
 
 ### 7. Crítica
-Em termos técnicos, o grupo adquiriu melhor entendimento sobre orientação a objetos em python, manipulação de estruturas de dados como dicionários e json, aspectos de programação funcional em python (closures, lambdas, função map, etc), a biblioteca gráfica do matplotlib, além de aprender mais sobre a edição de vídeos e efeitos especiais.
+Em termos técnicos, o grupo adquiriu melhor entendimento sobre orientação a objetos e aspectos de programação funcional em python (closures, lambdas, função map, etc), manipulação de estruturas de dados como dicionários e json, a biblioteca gráfica do matplotlib, além de aprender mais sobre a edição de vídeos e efeitos especiais.
 Como um todo, o grupo aprendeu com alguns desafios e a organização de um projeto em equipe. A divisão de tarefas, comunicação interpessoal e trabalhar em conjunto no código, fazendo a análise do experimento e escrevendo o relatório, foram alguns dos aspectos mais importantes que aprendemos neste projeto.
-A simulação e a visualização de conceitos físicos de cinemática foi bastante interessante, o que permitiu um maior entendimento dos conceitos físicos na prática. A definição de um restrito protocolo de aquisição para o experimento, erros de medição, e todos as rotinas para realizar o experimento foram fatores que aprendemos na prática que devem ser muito bem planejados.
+A simulação e a visualização de conceitos físicos de cinemática foi bastante interessante, o que permitiu um maior entendimento das leis físicas. A definição de um restrito protocolo de aquisição para o experimento, erros de medição, e todos as rotinas para realizar o projeto foram fatores que percebemos que devem ser muito bem planejados para obter resultados satisfatórios.
 
 ### 8. Log
 
