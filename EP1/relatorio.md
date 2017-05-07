@@ -184,7 +184,7 @@ Já na criação do algoritmo houve problemas para achar a velocidade inicial no
 
 - Para a realização do experimento foram nescessárias 5h30m divididas em 2 dias.
 - Para a edição foram 26 horas divididas em 7 dias.
-- Para criação do algoritmo foram nescessárias 28 horas divididas em 5 dias.
+- Para criação do algoritmo foram necessárias 28 horas divididas em 5 dias.
 - Para a criação do relatório foram 15 horas divididas em 2 dias.
 
 $\\$
