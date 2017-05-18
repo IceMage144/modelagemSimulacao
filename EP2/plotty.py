@@ -6,6 +6,8 @@ import sys
 
 matplotlib.style.use('ggplot')
 
+numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
 def plot1():
     legend = ['Fmx', 'Fmy', 'Fmz', 'FmR']
     times = []
@@ -15,10 +17,9 @@ def plot1():
     fra, axarr = plt.subplots(nrows=1, ncols=1, figsize=(7.5, 10))
     f = open(sys.argv[1], mode='r')
     for line in f:
-        try:
-            nums = [float(num.replace(',', '.')) for num in line.split(';')]
-        except ValueError:
+        if line[0] not in numbers:
             continue
+        nums = [float(num.replace(',', '.')) for num in line.split(';')]
         matrix.append(np.array(nums[1:5]))
         times.append(nums[0])
         if nums[4] > 100:
@@ -52,11 +53,10 @@ def plot2():
     fra, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
     f = open(sys.argv[1], mode='r')
     for line in f:
-        arr = line.split(';')[:-1]
-        try:
-            arr = [float(num.replace(',', '.')) for num in arr]
-        except ValueError:
+        if line[0] not in numbers:
             continue
+        arr = line.split(';')[:-1]
+        arr = [float(num.replace(',', '.')) for num in arr]
         nums = arr[1:4] + [np.sqrt(arr[1]**2 + arr[2]**2 + arr[3]**2)]
         nums2 = arr[4:] + [np.sqrt(arr[4]**2 + arr[5]**2 + arr[6]**2)]
         matrix.append(nums)
@@ -81,6 +81,7 @@ def main():
             plot2()
     except IndexError:
         print("Usage: plotter <csv file path> <number of plots>")
+        raise
 
 
 main()
