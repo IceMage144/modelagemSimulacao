@@ -140,10 +140,10 @@ class Ramp(Commons):
             realX = times
             realY = [2, 4]
             # plot informations
-            ax.plot(statesE[0], statesE[1], label="espaço simulado (Euler)")
-            ax.plot(statesE[0], statesE[2], "g-", label="velocidade simulada (Euler)")
-            ax.plot(statesEC[0], statesEC[1], "m:", label="espaço simulado (Euler-Cromer)")
-            ax.plot(statesEC[0], statesEC[2], "c:", label="velocidade simulada (Euler-Cromer)")
+            ax.plot(statesE[0], statesE[1], label="espaço simulado (m) (Euler)")
+            ax.plot(statesE[0], statesE[2], "g-", label="velocidade simulada (m/s) (Euler)")
+            ax.plot(statesEC[0], statesEC[1], "m:", label="espaço simulado (m) (Euler-Cromer)")
+            ax.plot(statesEC[0], statesEC[2], "c:", label="velocidade simulada (m/s) (Euler-Cromer)")
             for t,i in zip(times, range(1,3)):
                 ax.plot([t, t], [0, i*2], "r--")
             ax.scatter(realX, realY, color='red', marker="+", label="observado")
@@ -250,10 +250,10 @@ class Pendulum(Commons):
             f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
             ax = axarr[0]
             # plot space and speed
-            ax.plot(statesE[0], statesE[1], label="ângulo simulado (Euler)")
-            ax.plot(statesE[0], statesE[2], "g-", label="velocidade simulada (Euler)")
-            ax.plot(statesEC[0], statesEC[1], "m:", label="ângulo simulado (Euler-Cromer)")
-            ax.plot(statesEC[0], statesEC[2], "c:", label="velocidade simulada (Euler-Cromer)")
+            ax.plot(statesE[0], statesE[1], label="ângulo simulado (rad) (Euler)")
+            ax.plot(statesE[0], statesE[2], "g-", label="velocidade simulada (rad/s) (Euler)")
+            ax.plot(statesEC[0], statesEC[1], "m:", label="ângulo simulado (rad) (Euler-Cromer)")
+            ax.plot(statesEC[0], statesEC[2], "c:", label="velocidade simulada (rad/s) (Euler-Cromer)")
             ypos = [0]*len(times)
             ax.scatter(times, ypos, color="r", marker="x", label="observado")
             # customize the graph
