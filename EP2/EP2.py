@@ -77,14 +77,8 @@ class Ramp(Commons):
 
     # class variables
     DT = 0.1
-    THETA = 0.148353
-    MI = 0.055
-    # Mi obtained by the system:
-    # Sf = 6
-    # Sf = g*t²*(sin(theta)-mi*cos(theta))/2
-    # theta = 0.148353
-    # average final time t = 3.621
-    # g = 9.8
+    THETA = 0.148353 # ramp inclination
+    MI = 0.055 # friction coefficient
 
     def __init__(self, info):
         self.info = info
@@ -115,7 +109,7 @@ class Ramp(Commons):
         lstate = {"t" : 0, "s" : 0, "v" : 0}
         state = {"t" : 0, "s" : 0, "v" : 0}
         res = []
-        for i in np.arange(0.0, 55, dt):
+        for i in np.arange(0.0, 4, dt):
             state["v"] = lstate["v"] + g*dt*(np.sin(theta)-mi*np.cos(theta))
             state["s"] = lstate["s"] + state["v"]*dt
             state["t"] = lstate["t"] + dt
@@ -130,7 +124,6 @@ class Ramp(Commons):
         '''
         statesE = self.__statesEuler(self.THETA, self.MI, self.DT)
         statesEC = self.__statesEulerCromer(self.THETA, self.MI, self.DT)
-        self.__showAnimation(statesE)
         for exp in self.info:
             csv = exp["csv"]
             times = exp["times"]
@@ -141,10 +134,14 @@ class Ramp(Commons):
             realX = times
             realY = [2, 4]
             # plot informations
-            ax.plot(statesE[0], statesE[1], label="espaço simulado (m) (Euler)")
-            ax.plot(statesE[0], statesE[2], "g-", label="velocidade simulada (m/s) (Euler)")
-            ax.plot(statesEC[0], statesEC[1], "m:", label="espaço simulado (m) (Euler-Cromer)")
-            ax.plot(statesEC[0], statesEC[2], "c:", label="velocidade simulada (m/s) (Euler-Cromer)")
+            ax.plot(statesE[0], statesE[1],
+                    label="espaço simulado (m) (Euler)")
+            ax.plot(statesE[0], statesE[2], "g-",
+                    label="velocidade simulada (m/s) (Euler)")
+            ax.plot(statesEC[0], statesEC[1], "m:",
+                    label="espaço simulado (m) (Euler-Cromer)")
+            ax.plot(statesEC[0], statesEC[2], "c:",
+                    label="velocidade simulada (m/s) (Euler-Cromer)")
             for t,i in zip(times, range(1,3)):
                 ax.plot([t, t], [0, i*2], "r--")
             ax.scatter(realX, realY, color='red', marker="+", label="observado")
@@ -164,14 +161,18 @@ class Ramp(Commons):
             self._Commons__plotCsv(csv, axarr[2], [0, 4, 5, 6], "FmR")
             plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
             plt.show()
-
+        self.__showAnimation(statesE)
 
     def __showAnimation(self, states):
+        """
+        Shows the animation with simulated data given by states
+        """
         f, ax = plt.subplots(figsize=(10.5, 5))
         timeText = ax.text(0.05, 0.9, '', transform=ax.transAxes)
         velText = ax.text(0.05, 0.8, '', transform=ax.transAxes)
         rampPoints = [[0, 0], [7, 0], [7, 7*np.sin(self.THETA)]]
-        box = RegularPolygon((6.4*np.cos(self.THETA),6.4*np.sin(self.THETA)), 4, radius=0.4, orientation=np.pi/4+self.THETA)
+        box = RegularPolygon((6.4*np.cos(self.THETA),6.4*np.sin(self.THETA)), 4,
+                             radius=0.4, orientation=np.pi/4+self.THETA)
         ramp = Polygon(rampPoints, closed=True, color="g", ec="k")
         ax.add_patch(box)
         ax.add_patch(ramp)
@@ -199,9 +200,10 @@ class Ramp(Commons):
 class Pendulum(Commons):
 
     # class variables
-    THETA = np.pi/4
-    LENGTH = 1.5
     DT = 0.1
+    THETA = np.pi/4 # inicial angle
+    LENGTH = 1.5 # thread length
+    GAMMA = 0.043 # damp coefficient
 
     def __init__(self, info):
         self.info = info
@@ -213,12 +215,10 @@ class Pendulum(Commons):
         """
         lstate = {"t" : 0, "th" : itheta, "v" : 0}
         state = {"t" : 0, "th" : 0, "v" : 0}
-        # gamma is the
-        gamma = 0.043
         res = []
         for i in np.arange(0.0, 55, dt):
             state["th"] = lstate["th"] + lstate["v"]*dt
-            state["v"] = lstate["v"] - ((g*np.sin(state["th"]))/length + gamma*lstate["v"])*dt
+            state["v"] = lstate["v"] - ((g*np.sin(state["th"]))/length + self.GAMMA*lstate["v"])*dt
             state["t"] = lstate["t"] + dt
             res.append(list(lstate.values()))
             lstate = state.copy()
@@ -232,11 +232,10 @@ class Pendulum(Commons):
         """
         lstate = {"t" : 0, "th" : itheta, "v" : 0}
         state = {"t" : 0, "th" : 0, "v" : 0}
-        # gamma is the
-        gamma = 0.043
         res = []
         for i in np.arange(0.0, 55, dt):
-            state["v"] = lstate["v"] - ((g*np.sin(lstate["th"]))/length + gamma*lstate["v"])*dt
+            state["v"] = lstate["v"] - ((g*np.sin(lstate["th"]))/length +
+                         self.GAMMA*lstate["v"])*dt
             state["th"] = lstate["th"] + state["v"]*dt
             state["t"] = lstate["t"] + dt
             res.append(list(lstate.values()))
@@ -258,10 +257,14 @@ class Pendulum(Commons):
             f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
             ax = axarr[0]
             # plot space and speed
-            ax.plot(statesE[0], statesE[1], label="ângulo simulado (rad) (Euler)")
-            ax.plot(statesE[0], statesE[2], "g-", label="velocidade simulada (rad/s) (Euler)")
-            ax.plot(statesEC[0], statesEC[1], "m:", label="ângulo simulado (rad) (Euler-Cromer)")
-            ax.plot(statesEC[0], statesEC[2], "c:", label="velocidade simulada (rad/s) (Euler-Cromer)")
+            ax.plot(statesE[0], statesE[1],
+                    label="ângulo simulado (rad) (Euler)")
+            ax.plot(statesE[0], statesE[2], "g-",
+                    label="velocidade simulada (rad/s) (Euler)")
+            ax.plot(statesEC[0], statesEC[1], "m:",
+                    label="ângulo simulado (rad) (Euler-Cromer)")
+            ax.plot(statesEC[0], statesEC[2], "c:",
+                    label="velocidade simulada (rad/s) (Euler-Cromer)")
             ypos = [0]*len(times)
             ax.scatter(times, ypos, color="r", marker="x", label="observado")
             # customize the graph
@@ -282,6 +285,9 @@ class Pendulum(Commons):
         self.__showAnimation(statesE)
 
     def __showAnimation(self, states):
+        """
+        Shows the animation with simulated data given by states
+        """
         f, ax = plt.subplots(figsize=(5, 5))
         timeText = ax.text(0.05, 0.9, '', transform=ax.transAxes)
         velText = ax.text(0.05, 0.8, '', transform=ax.transAxes)
@@ -316,11 +322,10 @@ def main():
     with open(data) as f:
         jsonData = json.loads(f.read())
     # create objects and plot their information
-    r = Ramp(jsonData["Rampa"])
-    r.plotGraph()
     p = Pendulum(jsonData["Pendulo"])
     p.plotGraph()
-
+    r = Ramp(jsonData["Rampa"])
+    r.plotGraph()
 
 
 
