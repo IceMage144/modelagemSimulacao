@@ -1,12 +1,14 @@
 #python version = 3.6
-import sys
-import json
-import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import ArtistAnimation, FuncAnimation
-import pandas as pd
-import bisect
+from matplotlib.patches import RegularPolygon, Polygon
+from matplotlib.collections import PatchCollection
 from abc import ABC, abstractmethod
+import numpy as np
+import pandas as pd
+import sys
+import json
+import bisect
 
 g = 9.8
 
@@ -87,7 +89,7 @@ class Ramp(Commons):
     def __init__(self, info):
         self.info = info
 
-    def __statesFEuler(self, theta, mi, dt):
+    def __statesEuler(self, theta, mi, dt):
         """
         Uses Euler algorithm and given ramp inclination (theta), kinetic
         friction coefficient (mi) and delta time (dt) to calculate space and
@@ -104,12 +106,30 @@ class Ramp(Commons):
             lstate = state.copy()
         return np.array(res).transpose()
 
+    def __statesEulerCromer(self, theta, mi, dt):
+        """
+        Uses Euler-Cromer algorithm and given ramp inclination (theta), kinetic
+        friction coefficient (mi) and delta time (dt) to calculate space and
+        speed of a sliding object
+        """
+        lstate = {"t" : 0, "s" : 0, "v" : 0}
+        state = {"t" : 0, "s" : 0, "v" : 0}
+        res = []
+        for i in np.arange(0.0, 55, dt):
+            state["v"] = lstate["v"] + g*dt*(np.sin(theta)-mi*np.cos(theta))
+            state["s"] = lstate["s"] + state["v"]*dt
+            state["t"] = lstate["t"] + dt
+            res.append(list(lstate.values()))
+            lstate = state.copy()
+        return np.array(res).transpose()
+
     def plotGraph(self):
         '''
         Plots the full simulation and data of a ramp sliding object in a
         matplotlib plot!
         '''
-        states = self.__statesFEuler(self.THETA, self.MI, self.DT)
+        statesE = self.__statesEuler(self.THETA, self.MI, self.DT)
+        statesEC = self.__statesEulerCromer(self.THETA, self.MI, self.DT)
         for exp in self.info:
             csv = exp["csv"]
             times = exp["times"]
@@ -120,8 +140,10 @@ class Ramp(Commons):
             realX = times
             realY = [2, 4]
             # plot informations
-            ax.plot(states[0], states[1], label="espaço simulado")
-            ax.plot(states[0], states[2], "g-", label="velocidade simulada")
+            ax.plot(statesE[0], statesE[1], label="espaço simulado (Euler)")
+            ax.plot(statesE[0], statesE[2], "g-", label="velocidade simulada (Euler)")
+            ax.plot(statesEC[0], statesEC[1], "m:", label="espaço simulado (Euler-Cromer)")
+            ax.plot(statesEC[0], statesEC[2], "c:", label="velocidade simulada (Euler-Cromer)")
             for t,i in zip(times, range(1,3)):
                 ax.plot([t, t], [0, i*2], "r--")
             ax.scatter(realX, realY, color='red', marker="+", label="observado")
@@ -131,7 +153,7 @@ class Ramp(Commons):
             ax.set_xlim(0, obsTime)
             ax.set_ylim(0, 6)
             # add legends and error
-            err = self._Commons__calculateError(states, realY, times)
+            err = self._Commons__calculateError(statesE, realY, times)
             ax.scatter(0, 0,  c = 'w', label=f"Erro: {round(err, 2)}")
             ax.set_title(csv, fontsize=16, color="#000c3d")
             ax.legend(loc='upper left')
@@ -140,6 +162,31 @@ class Ramp(Commons):
             self._Commons__plotCsv(csv, axarr[2], [0, 4, 5, 6], "FmR")
             plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
             plt.show()
+        self.__showAnimation(statesE)
+
+    def __showAnimation(self, states):
+        f, ax = plt.subplots(figsize=(10.5, 5))
+        text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+        rampPoints = [[0, 0], [7, 0], [7, 7*np.sin(self.THETA)]]
+        box = RegularPolygon((6.4*np.cos(self.THETA),6.4*np.sin(self.THETA)), 4, radius=0.4, orientation=np.pi/4+self.THETA)
+        ramp = Polygon(rampPoints, closed=True, color="g", ec="k")
+        ax.add_patch(box)
+        ax.add_patch(ramp)
+        def update():
+            for time, space in zip(states[0], states[1]):
+                x = (6.4-space)*np.cos(self.THETA)
+                y = (6.4-space)*np.sin(self.THETA)
+                yield time, x, y
+        def plot(update):
+            time, x, y = update
+            box.xy = (x, y)
+            text.set_text(f"Time = {round(time, 2)}s")
+            return box, ramp, text
+        ani = FuncAnimation(f, plot, update, interval=1000*self.DT)
+        ax.set_xlim(-1, 7)
+        ax.set_ylim(0, 4)
+        ax.set_title("Animação rampa", fontsize=16, color="#000c3d")
+        plt.show()
 
 class Pendulum(Commons):
 
@@ -151,7 +198,7 @@ class Pendulum(Commons):
     def __init__(self, info):
         self.info = info
 
-    def __statesFEuler(self, itheta, length, dt):
+    def __statesEuler(self, itheta, length, dt):
         """
         Uses Euler algorithm and given initial angle (itheta), thread length
         (length) and delta time (dt) to calculate space and speed of a pendulum
@@ -169,13 +216,33 @@ class Pendulum(Commons):
             lstate = state.copy()
         return np.array(res).transpose()
 
+    def __statesEulerCromer(self, itheta, length, dt):
+        """
+        Uses Euler-Cromer algorithm and given initial angle (itheta), thread
+        length (length) and delta time (dt) to calculate space and speed of a
+        pendulum
+        """
+        lstate = {"t" : 0, "th" : itheta, "v" : 0}
+        state = {"t" : 0, "th" : 0, "v" : 0}
+        # gamma is the
+        gamma = 0.043
+        res = []
+        for i in np.arange(0.0, 55, dt):
+            state["v"] = lstate["v"] - ((g*np.sin(lstate["th"]))/length + gamma*lstate["v"])*dt
+            state["th"] = lstate["th"] + state["v"]*dt
+            state["t"] = lstate["t"] + dt
+            res.append(list(lstate.values()))
+            lstate = state.copy()
+        return np.array(res).transpose()
+
     def plotGraph(self):
         '''
         Plots the full simulation and data of a pendular movement in a
         matplotlib plot!
         '''
         # calculate space and speed
-        states = self.__statesFEuler(self.THETA, self.LENGTH, self.DT)
+        statesE = self.__statesEuler(self.THETA, self.LENGTH, self.DT)
+        statesEC = self.__statesEulerCromer(self.THETA, self.LENGTH, self.DT)
         for exp in self.info:
             csv = exp["csv"]
             times = exp["times"]
@@ -183,8 +250,10 @@ class Pendulum(Commons):
             f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
             ax = axarr[0]
             # plot space and speed
-            ax.plot(states[0], states[1], label="ângulo simulado")
-            ax.plot(states[0], states[2], "g-", label="velocidade simulada")
+            ax.plot(statesE[0], statesE[1], label="ângulo simulado (Euler)")
+            ax.plot(statesE[0], statesE[2], "g-", label="velocidade simulada (Euler)")
+            ax.plot(statesEC[0], statesEC[1], "m:", label="ângulo simulado (Euler-Cromer)")
+            ax.plot(statesEC[0], statesEC[2], "c:", label="velocidade simulada (Euler-Cromer)")
             ypos = [0]*len(times)
             ax.scatter(times, ypos, color="r", marker="x", label="observado")
             # customize the graph
@@ -193,7 +262,7 @@ class Pendulum(Commons):
             ax.set_xlim(0, fTime)
             ax.set_ylim(-2, 2)
             # add legends and error
-            err = self._Commons__calculateError(states, ypos, times)
+            err = self._Commons__calculateError(statesE, ypos, times)
             ax.scatter(0, 0,  c = 'w', label=f"Erro: {round(err, 2)}")
             ax.set_title(csv, fontsize=16, color="#000c3d")
             ax.legend(loc='upper right')
@@ -201,6 +270,9 @@ class Pendulum(Commons):
             self._Commons__plotCsv(csv, axarr[1], [0, 1, 2, 3], "FmR")
             plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
             plt.show()
+        self.__showAnimation(statesE)
+
+    def __showAnimation(self, states):
         f, ax = plt.subplots(figsize=(5, 5))
         text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
         bob, = ax.plot([], [], "bo", ms=10)
@@ -211,7 +283,7 @@ class Pendulum(Commons):
                 y = -self.LENGTH*np.cos(theta)
                 yield time, x, y
         def plot(update):
-            time, x, y = foo
+            time, x, y = update
             thread.set_data([x, 0], [y, 0])
             bob.set_data([x], [y])
             text.set_text(f"Time = {round(time, 2)}s")
@@ -235,6 +307,7 @@ def main():
     p.plotGraph()
     r = Ramp(jsonData["Rampa"])
     r.plotGraph()
+
 
 
 
