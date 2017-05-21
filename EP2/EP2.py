@@ -3,6 +3,7 @@ import sys
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.animation import ArtistAnimation, FuncAnimation
 import pandas as pd
 import bisect
 
@@ -47,7 +48,7 @@ class Commons:
         axis.legend(loc='upper left')
         axis.set_xlim(0, np.max(np.asarray(df['Tempo'])))
 
-    def __calculateError(self, states, pos):
+    def __calculateError(self, states, pos, times):
         """
         Calculates the deviation of y axis error at observed times
         """
@@ -55,7 +56,7 @@ class Commons:
         stimes = states[0]
         spos = states[1]
         n = len(pos)
-        for t, p in zip(self.times, pos):
+        for t, p in zip(times, pos):
             i = bisect.bisect_left(stimes, t) - 1
             if stimes[i+1] == t:
                 y = spos[i+1]
@@ -79,10 +80,7 @@ class Ramp(Commons):
     # g = 9.8
 
     def __init__(self, info):
-        self.csv = info["csv"]
-        self.fTime = info["fTime"]
-        self.times = info["times"]
-        self.obsTime = info["obsTime"]
+        self.info = info
 
     def __statesFEuler(self, theta, mi, dt):
         """
@@ -93,7 +91,7 @@ class Ramp(Commons):
         lstate = {"t" : 0, "s" : 0, "v" : 0}
         state = {"t" : 0, "s" : 0, "v" : 0}
         res = []
-        for i in np.arange(0.0, self.fTime, dt):
+        for i in np.arange(0.0, 4, dt):
             state["s"] = lstate["s"] + lstate["v"]*dt
             state["v"] = lstate["v"] + g*dt*(np.sin(theta)-mi*np.cos(theta))
             state["t"] = lstate["t"] + dt
@@ -106,33 +104,37 @@ class Ramp(Commons):
         Plots the full simulation and data of a ramp sliding object in a
         matplotlib plot!
         '''
-        f, axarr = plt.subplots(nrows=3, ncols=1, figsize=(15, 10))
-        ax = axarr[0]
-        # calculate space and speed
-        realX = self.times
-        realY = [2, 4]
         states = self.__statesFEuler(self.THETA, self.MI, self.DT)
-        # plot informations
-        ax.plot(states[0], states[1], label="espaço simulado")
-        ax.plot(states[0], states[2], "g-", label="velocidade simulada")
-        for t,i in zip(self.times, range(1,3)):
-            ax.plot([t, t], [0, i*2], "r--")
-        ax.scatter(realX, realY, color='red', marker="+", label="observado")
-        # customize the graph
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        ax.set_xlim(0, self.obsTime)
-        ax.set_ylim(0, 6)
-        # add legends and error
-        err = self._Commons__calculateError(states, realY)
-        ax.scatter(0, 0,  c = 'w', label=f"Erro: {round(err, 2)}")
-        ax.set_title(self.csv, fontsize=16, color="#000c3d")
-        ax.legend(loc='upper left')
-        # plot csvs
-        self._Commons__plotCsv(self.csv, axarr[1], [0, 1, 2, 3], "FgR")
-        self._Commons__plotCsv(self.csv, axarr[2], [0, 4, 5, 6], "FmR")
-        plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
-        plt.show()
+        for exp in self.info:
+            csv = exp["csv"]
+            times = exp["times"]
+            obsTime = exp["obsTime"]
+            f, axarr = plt.subplots(nrows=3, ncols=1, figsize=(15, 10))
+            ax = axarr[0]
+            # calculate space and speed
+            realX = times
+            realY = [2, 4]
+            # plot informations
+            ax.plot(states[0], states[1], label="espaço simulado")
+            ax.plot(states[0], states[2], "g-", label="velocidade simulada")
+            for t,i in zip(times, range(1,3)):
+                ax.plot([t, t], [0, i*2], "r--")
+            ax.scatter(realX, realY, color='red', marker="+", label="observado")
+            # customize the graph
+            ax.spines['right'].set_visible(False)
+            ax.spines['top'].set_visible(False)
+            ax.set_xlim(0, obsTime)
+            ax.set_ylim(0, 6)
+            # add legends and error
+            err = self._Commons__calculateError(states, realY, times)
+            ax.scatter(0, 0,  c = 'w', label=f"Erro: {round(err, 2)}")
+            ax.set_title(csv, fontsize=16, color="#000c3d")
+            ax.legend(loc='upper left')
+            # plot csvs
+            self._Commons__plotCsv(csv, axarr[1], [0, 1, 2, 3], "FgR")
+            self._Commons__plotCsv(csv, axarr[2], [0, 4, 5, 6], "FmR")
+            plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
+            plt.show()
 
 class Pendulum(Commons):
 
@@ -142,9 +144,7 @@ class Pendulum(Commons):
     DT = 0.1
 
     def __init__(self, info):
-        self.csv = info["csv"]
-        self.fTime = info["fTime"]
-        self.times = info["times"]
+        self.info = info
 
     def __statesFEuler(self, itheta, length, dt):
         """
@@ -156,7 +156,7 @@ class Pendulum(Commons):
         # gamma is the
         gamma = 0.043
         res = []
-        for i in np.arange(0.0, self.fTime, dt):
+        for i in np.arange(0.0, 55, dt):
             state["th"] = lstate["th"] + lstate["v"]*dt
             state["v"] = lstate["v"] - ((g*np.sin(state["th"]))/length + gamma*lstate["v"])*dt
             state["t"] = lstate["t"] + dt
@@ -169,27 +169,52 @@ class Pendulum(Commons):
         Plots the full simulation and data of a pendular movement in a
         matplotlib plot!
         '''
-        f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
-        ax = axarr[0]
-        # calculate space and speed and plot them
+        # calculate space and speed
         states = self.__statesFEuler(self.THETA, self.LENGTH, self.DT)
-        ax.plot(states[0], states[1], label="ângulo simulado")
-        ax.plot(states[0], states[2], "g-", label="velocidade simulada")
-        ypos = [0]*len(self.times)
-        ax.scatter(self.times, ypos, color="r", marker="x", label="observado")
-        # customize the graph
-        ax.spines['right'].set_visible(False)
-        ax.spines['top'].set_visible(False)
-        ax.set_xlim(0, self.fTime)
-        ax.set_ylim(-2, 2)
-        # add legends and error
-        err = self._Commons__calculateError(states, ypos)
-        ax.scatter(0, 0,  c = 'w', label=f"Erro: {round(err, 2)}")
-        ax.set_title(self.csv, fontsize=16, color="#000c3d")
-        ax.legend(loc='upper right')
-        # plot csv
-        self._Commons__plotCsv(self.csv, axarr[1], [0, 1, 2, 3], "FmR")
-        plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
+        for exp in self.info:
+            csv = exp["csv"]
+            times = exp["times"]
+            fTime = exp["fTime"]
+            f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
+            ax = axarr[0]
+            # plot space and speed
+            ax.plot(states[0], states[1], label="ângulo simulado")
+            ax.plot(states[0], states[2], "g-", label="velocidade simulada")
+            ypos = [0]*len(times)
+            ax.scatter(times, ypos, color="r", marker="x", label="observado")
+            # customize the graph
+            ax.spines['right'].set_visible(False)
+            ax.spines['top'].set_visible(False)
+            ax.set_xlim(0, fTime)
+            ax.set_ylim(-2, 2)
+            # add legends and error
+            err = self._Commons__calculateError(states, ypos, times)
+            ax.scatter(0, 0,  c = 'w', label=f"Erro: {round(err, 2)}")
+            ax.set_title(csv, fontsize=16, color="#000c3d")
+            ax.legend(loc='upper right')
+            # plot csv
+            self._Commons__plotCsv(csv, axarr[1], [0, 1, 2, 3], "FmR")
+            plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
+            plt.show()
+        f, ax = plt.subplots(figsize=(5, 5))
+        text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+        bob, = ax.plot([], [], "bo", ms=10)
+        thread, = ax.plot([], [], "b-")
+        def update():
+            for time, theta in zip(states[0], states[1]):
+                x = self.LENGTH*np.sin(theta)
+                y = -self.LENGTH*np.cos(theta)
+                yield time, x, y
+        def plot(update):
+            time, x, y = foo
+            thread.set_data([x, 0], [y, 0])
+            bob.set_data([x], [y])
+            text.set_text(f"Time = {round(time, 2)}s")
+            return text, bob, thread
+        ani = FuncAnimation(f, plot, update, interval=1000*self.DT)
+        ax.set_xlim(-1.5, 1.5)
+        ax.set_ylim(-2, 1)
+        ax.set_title("Animação pêndulo", fontsize=16, color="#000c3d")
         plt.show()
 
 def main():
@@ -201,12 +226,10 @@ def main():
     with open(data) as f:
         jsonData = json.loads(f.read())
     # create objects and plot their information
-    for i in range(len(jsonData["Rampa"])):
-        r = Ramp(jsonData["Rampa"][i])
-        r.plotGraph()
-    for i in range(len(jsonData["Pendulo"])):
-        r = Pendulum(jsonData["Pendulo"][i])
-        r.plotGraph()
+    p = Pendulum(jsonData["Pendulo"])
+    p.plotGraph()
+    r = Ramp(jsonData["Rampa"])
+    r.plotGraph()
 
 
 
