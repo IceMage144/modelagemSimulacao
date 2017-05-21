@@ -120,8 +120,8 @@ class Ramp(Commons):
             realX = times
             realY = [2, 4]
             # plot informations
-            ax.plot(states[0], states[1], label="espaço simulado")
-            ax.plot(states[0], states[2], "g-", label="velocidade simulada")
+            ax.plot(states[0], states[1], label="espaço simulado (m)")
+            ax.plot(states[0], states[2], "g-", label="velocidade simulada (m/s)")
             for t,i in zip(times, range(1,3)):
                 ax.plot([t, t], [0, i*2], "r--")
             ax.scatter(realX, realY, color='red', marker="+", label="observado")
@@ -183,8 +183,8 @@ class Pendulum(Commons):
             f, axarr = plt.subplots(nrows=2, ncols=1, figsize=(15, 10))
             ax = axarr[0]
             # plot space and speed
-            ax.plot(states[0], states[1], label="ângulo simulado")
-            ax.plot(states[0], states[2], "g-", label="velocidade simulada")
+            ax.plot(states[0], states[1], label="ângulo simulado (rad)")
+            ax.plot(states[0], states[2], "g-", label="velocidade simulada (rad/s)")
             ypos = [0]*len(times)
             ax.scatter(times, ypos, color="r", marker="x", label="observado")
             # customize the graph
