@@ -156,6 +156,7 @@ class Ramp(Commons):
             err = self._Commons__calculateError(statesE, realY, times)
             ax.scatter(0, 0,  c = 'w', label=f"Erro: {round(err, 2)}")
             ax.set_title(csv, fontsize=16, color="#000c3d")
+            ax.set_xlabel('tempo (s)', fontsize=13)
             ax.legend(loc='upper left')
             # plot csvs
             self._Commons__plotCsv(csv, axarr[1], [0, 1, 2, 3], "FgR")
@@ -185,6 +186,8 @@ class Ramp(Commons):
         ani = FuncAnimation(f, plot, update, interval=1000*self.DT)
         ax.set_xlim(-1, 7)
         ax.set_ylim(0, 4)
+        ax.set_xlabel('(m)', fontsize=13)
+        ax.set_ylabel('(m)', fontsize=13)
         ax.set_title("Animação rampa", fontsize=16, color="#000c3d")
         plt.show()
 
@@ -265,6 +268,7 @@ class Pendulum(Commons):
             err = self._Commons__calculateError(statesE, ypos, times)
             ax.scatter(0, 0,  c = 'w', label=f"Erro: {round(err, 2)}")
             ax.set_title(csv, fontsize=16, color="#000c3d")
+            ax.set_xlabel('tempo (s)', fontsize=13)
             ax.legend(loc='upper right')
             # plot csv
             self._Commons__plotCsv(csv, axarr[1], [0, 1, 2, 3], "FmR")
@@ -291,6 +295,8 @@ class Pendulum(Commons):
         ani = FuncAnimation(f, plot, update, interval=1000*self.DT)
         ax.set_xlim(-1.5, 1.5)
         ax.set_ylim(-2, 1)
+        ax.set_xlabel('(m)', fontsize=13)
+        ax.set_ylabel('(m)', fontsize=13)
         ax.set_title("Animação pêndulo", fontsize=16, color="#000c3d")
         plt.show()
 
