@@ -168,6 +168,7 @@ class Ramp(Commons):
         Shows the animation with simulated data given by states
         """
         f, ax = plt.subplots(figsize=(10.5, 5))
+        # create objects to be plotted
         timeText = ax.text(0.05, 0.9, '', transform=ax.transAxes)
         velText = ax.text(0.05, 0.8, '', transform=ax.transAxes)
         rampPoints = [[0, 0], [7, 0], [7, 7*np.sin(self.THETA)]]
@@ -176,6 +177,8 @@ class Ramp(Commons):
         ramp = Polygon(rampPoints, closed=True, color="g", ec="k")
         ax.add_patch(box)
         ax.add_patch(ramp)
+        # function that iterates through states and yield the time and box
+        # position and speed
         def update():
             for time, space, vel in zip(states[0], states[1], states[2]):
                 x = (6.4-space)*np.cos(self.THETA)
@@ -183,13 +186,16 @@ class Ramp(Commons):
                 yield time, x, y, vel
                 if space > 6:
                     break
+        # function that plot each frame
         def plot(update):
             time, x, y, vel = update
             box.xy = (x, y)
             timeText.set_text(f"Time = {round(time, 2)}s")
             velText.set_text(f"Speed = {round(vel, 2)}m/s")
             return box, ramp, timeText, velText
+        # create animation
         ani = FuncAnimation(f, plot, update, interval=1000*self.DT)
+        # add legends
         ax.set_xlim(-1, 7)
         ax.set_ylim(0, 4)
         ax.set_xlabel('(m)', fontsize=13)
@@ -289,15 +295,19 @@ class Pendulum(Commons):
         Shows the animation with simulated data given by states
         """
         f, ax = plt.subplots(figsize=(5, 5))
+        # create objects to be plotted
         timeText = ax.text(0.05, 0.9, '', transform=ax.transAxes)
         velText = ax.text(0.05, 0.8, '', transform=ax.transAxes)
         bob, = ax.plot([], [], "bo", ms=10)
         thread, = ax.plot([], [], "b-")
+        # function that iterates through states and yield the time and box
+        # position and speed
         def update():
             for time, theta, vel in zip(states[0], states[1], states[2]):
                 x = self.LENGTH*np.sin(theta)
                 y = -self.LENGTH*np.cos(theta)
                 yield time, x, y, vel
+        # function that plot each frame
         def plot(update):
             time, x, y, vel = update
             thread.set_data([x, 0], [y, 0])
@@ -305,7 +315,9 @@ class Pendulum(Commons):
             timeText.set_text(f"Time = {round(time, 2)}s")
             velText.set_text(f"Speed = {round(vel, 2)}rad/s")
             return timeText, velText, bob, thread
+        # create animation
         ani = FuncAnimation(f, plot, update, interval=1000*self.DT)
+        # add legends
         ax.set_xlim(-1.5, 1.5)
         ax.set_ylim(-2, 1)
         ax.set_xlabel('(m)', fontsize=13)
