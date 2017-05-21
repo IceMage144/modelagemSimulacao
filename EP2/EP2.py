@@ -6,10 +6,11 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import ArtistAnimation, FuncAnimation
 import pandas as pd
 import bisect
+from abc import ABC, abstractmethod
 
 g = 9.8
 
-class Commons:
+class Commons(ABC):
 
     legends = {
         "time" : "Tempo",
@@ -65,6 +66,10 @@ class Commons:
                 y = m*(t-stimes[i]) + spos[i]
             s += (p-y)**2
         return np.sqrt(s/n)
+
+    @abstractmethod
+    def plotGraph(self):
+        pass
 
 class Ramp(Commons):
 
