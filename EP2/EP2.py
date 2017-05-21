@@ -130,6 +130,7 @@ class Ramp(Commons):
         '''
         statesE = self.__statesEuler(self.THETA, self.MI, self.DT)
         statesEC = self.__statesEulerCromer(self.THETA, self.MI, self.DT)
+        self.__showAnimation(statesE)
         for exp in self.info:
             csv = exp["csv"]
             times = exp["times"]
@@ -163,26 +164,30 @@ class Ramp(Commons):
             self._Commons__plotCsv(csv, axarr[2], [0, 4, 5, 6], "FmR")
             plt.tight_layout(pad=4, w_pad=0.5, h_pad=5.0)
             plt.show()
-        self.__showAnimation(statesE)
+
 
     def __showAnimation(self, states):
         f, ax = plt.subplots(figsize=(10.5, 5))
-        text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+        timeText = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+        velText = ax.text(0.05, 0.8, '', transform=ax.transAxes)
         rampPoints = [[0, 0], [7, 0], [7, 7*np.sin(self.THETA)]]
         box = RegularPolygon((6.4*np.cos(self.THETA),6.4*np.sin(self.THETA)), 4, radius=0.4, orientation=np.pi/4+self.THETA)
         ramp = Polygon(rampPoints, closed=True, color="g", ec="k")
         ax.add_patch(box)
         ax.add_patch(ramp)
         def update():
-            for time, space in zip(states[0], states[1]):
+            for time, space, vel in zip(states[0], states[1], states[2]):
                 x = (6.4-space)*np.cos(self.THETA)
                 y = (6.4-space)*np.sin(self.THETA)
-                yield time, x, y
+                yield time, x, y, vel
+                if space > 6:
+                    break
         def plot(update):
-            time, x, y = update
+            time, x, y, vel = update
             box.xy = (x, y)
-            text.set_text(f"Time = {round(time, 2)}s")
-            return box, ramp, text
+            timeText.set_text(f"Time = {round(time, 2)}s")
+            velText.set_text(f"Speed = {round(vel, 2)}m/s")
+            return box, ramp, timeText, velText
         ani = FuncAnimation(f, plot, update, interval=1000*self.DT)
         ax.set_xlim(-1, 7)
         ax.set_ylim(0, 4)
@@ -278,20 +283,22 @@ class Pendulum(Commons):
 
     def __showAnimation(self, states):
         f, ax = plt.subplots(figsize=(5, 5))
-        text = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+        timeText = ax.text(0.05, 0.9, '', transform=ax.transAxes)
+        velText = ax.text(0.05, 0.8, '', transform=ax.transAxes)
         bob, = ax.plot([], [], "bo", ms=10)
         thread, = ax.plot([], [], "b-")
         def update():
-            for time, theta in zip(states[0], states[1]):
+            for time, theta, vel in zip(states[0], states[1], states[2]):
                 x = self.LENGTH*np.sin(theta)
                 y = -self.LENGTH*np.cos(theta)
-                yield time, x, y
+                yield time, x, y, vel
         def plot(update):
-            time, x, y = update
+            time, x, y, vel = update
             thread.set_data([x, 0], [y, 0])
             bob.set_data([x], [y])
-            text.set_text(f"Time = {round(time, 2)}s")
-            return text, bob, thread
+            timeText.set_text(f"Time = {round(time, 2)}s")
+            velText.set_text(f"Speed = {round(vel, 2)}rad/s")
+            return timeText, velText, bob, thread
         ani = FuncAnimation(f, plot, update, interval=1000*self.DT)
         ax.set_xlim(-1.5, 1.5)
         ax.set_ylim(-2, 1)
@@ -309,10 +316,11 @@ def main():
     with open(data) as f:
         jsonData = json.loads(f.read())
     # create objects and plot their information
-    p = Pendulum(jsonData["Pendulo"])
-    p.plotGraph()
     r = Ramp(jsonData["Rampa"])
     r.plotGraph()
+    p = Pendulum(jsonData["Pendulo"])
+    p.plotGraph()
+
 
 
 
