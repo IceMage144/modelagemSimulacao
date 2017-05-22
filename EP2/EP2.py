@@ -76,7 +76,7 @@ class Commons(ABC):
 class Ramp(Commons):
 
     # class variables
-    DT = 0.1
+    DT = 0.05
     THETA = 0.148353 # ramp inclination
     MI = 0.055 # friction coefficient
 
@@ -206,10 +206,10 @@ class Ramp(Commons):
 class Pendulum(Commons):
 
     # class variables
-    DT = 0.1
+    DT = 0.05
     THETA = np.pi/4 # inicial angle
     LENGTH = 1.5 # thread length
-    GAMMA = 0.043 # damp coefficient
+    GAMMA = 0.052 # damp coefficient
 
     def __init__(self, info):
         self.info = info
