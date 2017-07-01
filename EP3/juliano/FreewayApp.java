@@ -21,8 +21,8 @@ public class FreewayApp extends AbstractSimulation {
 	Freeway freeway = new Freeway();
 	DisplayFrame display = new DisplayFrame("Freeway");
 	LatticeFrame spaceTime = new LatticeFrame("space", "time", "Space Time Diagram");
-	HistogramFrame hist1 = new HistogramFrame("Times", "Vel", "Velocity Histogram");
-	HistogramFrame hist2 = new HistogramFrame("Times", "Gap", "Gap Histogram");
+	HistogramFrame hist1 = new HistogramFrame("Vel", "", "Velocity Histogram");
+	HistogramFrame hist2 = new HistogramFrame("Gap", "", "Gap Histogram");
 
 	/**
 	 * Constructs the FreewayApp.
@@ -40,7 +40,7 @@ public class FreewayApp extends AbstractSimulation {
 		freeway.p = control.getDouble("Slow down probability");
 		freeway.maximumVelocity = control.getInt("Maximum velocity");
 		display.setPreferredMinMax(0, freeway.roadLength, -3, 4);
-		Freeway.setProbDistribution(control.getInt("Prob (1 = Uniform, 2 = Normal)"));	
+		Freeway.setProbDistribution(control.getInt("Prob (1 = Uniform, 2 = Normal)"));
 		freeway.initialize(spaceTime, hist1, hist2);
 	}
 
@@ -60,7 +60,7 @@ public class FreewayApp extends AbstractSimulation {
 		control.setValue("Slow down probability", 0.5);
 		control.setValue("Maximum velocity", 2);
 		control.setValue("Steps between plots", 1);
-		control.setValue("Prob (1 = Uniform, 2 = Normal)", 1);	
+		control.setValue("Prob (1 = Uniform, 2 = Normal)", 1);
 		enableStepsPerDisplay(true);
 	}
 

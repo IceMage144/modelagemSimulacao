@@ -1,7 +1,7 @@
 /*
  * Open Source Physics software is free software as described near the bottom of this code file.
  *
- * For additional information and documentation on Open Source Physics please see: 
+ * For additional information and documentation on Open Source Physics please see:
  * <http://www.opensourcephysics.org/>
  */
 
@@ -11,7 +11,7 @@ import org.opensourcephysics.display.*;
 import org.opensourcephysics.frames.*;
 import org.opensourcephysics.display2d.*;
 import org.opensourcephysics.controls.*;
-import java.util.*;	
+import java.util.*;
 
 
 /**
@@ -34,23 +34,23 @@ public class Freeway implements Drawable {
 	public int scrollTime = 100; // number of time steps before scrolling space-time diagram
 	public HistogramFrame hist1;
 	public HistogramFrame hist2;
-	private static int prob;	
-	
+	private static int prob;
+
 
 	public Freeway(){
-		if(Freeway.prob < 1)		
-			Freeway.prob = 1;		
-	}		
-	/**		
-	 * if probD = 1 : Uniform distribution		
-	 * if probD = 2 : Normal distribution		
-	 * @param probD		
-	 */		
-	public static void setProbDistribution(int probD){		
-		if(probD != 1 && probD != 2)		
-			throw new java.lang.IllegalArgumentException("We only accept UNIFORM or NORMAL. Get out freak!");		
-		Freeway.prob = probD;		
-	}		
+		if(Freeway.prob < 1)
+			Freeway.prob = 1;
+	}
+	/**
+	 * if probD = 1 : Uniform distribution
+	 * if probD = 2 : Normal distribution
+	 * @param probD
+	 */
+	public static void setProbDistribution(int probD){
+		if(probD != 1 && probD != 2)
+			throw new java.lang.IllegalArgumentException("We only accept UNIFORM or NORMAL. Get out freak!");
+		Freeway.prob = probD;
+	}
 
 	/**
 	 * Initializes arrays and starting configuration of cars.
@@ -68,6 +68,8 @@ public class Freeway implements Drawable {
 		road.setIndexedColor(1, java.awt.Color.GREEN);
 		spaceTime.setIndexedColor(0, java.awt.Color.RED);
 		spaceTime.setIndexedColor(1, java.awt.Color.GREEN);
+		hist1.setDiscrete(false);
+		hist2.setDiscrete(false);
 		int d = roadLength/numberOfCars;
 		x[0] = 0;
 		v[0] = maximumVelocity;
@@ -83,25 +85,25 @@ public class Freeway implements Drawable {
 		steps = 0;
 		t = 0;
 	}
-	/**		
-	 * Returns true if a given event occurs, false otherwise		
-	 * @param isFirst - true if it's the initialization, false otherwise		
-	 * @return true if a given event occurs, false otherwise		
-	 */		
-	private boolean probChooser(boolean isFirst) {		
-		if(Freeway.prob == 1){		
-			if(isFirst)		
-				return Math.random() < 0.5;		
-			return Math.random() < p;					
-		}		
-		else{ /* Normal distribution */		
-			double val = (new Random()).nextGaussian();		
-			if(val < -4) val = -4.0;		
-			else if(val > 4) val = 4.0;		
-			if(isFirst)		
-				return val < 0;		
-			return val < -4.0 + p*8;		
-		}					
+	/**
+	 * Returns true if a given event occurs, false otherwise
+	 * @param isFirst - true if it's the initialization, false otherwise
+	 * @return true if a given event occurs, false otherwise
+	 */
+	private boolean probChooser(boolean isFirst) {
+		if(Freeway.prob == 1){
+			if(isFirst)
+				return Math.random() < 0.5;
+			return Math.random() < p;
+		}
+		else{ /* Normal distribution */
+			double val = (new Random()).nextGaussian();
+			if(val < -4) val = -4.0;
+			else if(val > 4) val = 4.0;
+			if(isFirst)
+				return val < 0;
+			return val < -4.0 + p*8;
+		}
 	}
 
 	/**
@@ -182,7 +184,7 @@ public class Freeway implements Drawable {
 	}
 }
 
-/* 
+/*
  * Open Source Physics software is free software; you can redistribute
  * it and/or modify it under the terms of the GNU General Public License (GPL) as
  * published by the Free Software Foundation; either version 2 of the License,
