@@ -1,10 +1,18 @@
+/*
+ * Open Source Physics software is free software as described near the bottom of this code file.
+ *
+ * For additional information and documentation on Open Source Physics please see: 
+ * <http://www.opensourcephysics.org/>
+ */
+
 package org.opensourcephysics.sip.ch14.traffic;
 import java.awt.Graphics;
-import java.util.*;
 import org.opensourcephysics.display.*;
 import org.opensourcephysics.frames.*;
 import org.opensourcephysics.display2d.*;
 import org.opensourcephysics.controls.*;
+import java.util.*;	
+
 
 /**
  * Freeway uses the Nagel-Schreckenberg model of single lane traffic
@@ -24,28 +32,33 @@ public class Freeway implements Drawable {
 	public double flow;
 	public int steps, t;
 	public int scrollTime = 100; // number of time steps before scrolling space-time diagram
-	private static int prob;
+	public HistogramFrame hist1;
+	public HistogramFrame hist2;
+	private static int prob;	
+	
 
 	public Freeway(){
-		if(Freeway.prob < 1)
-			Freeway.prob = 1;
-	}
-	/**
-	 * if probD = 1 : Uniform distribution
-	 * if probD = 2 : Normal distribution
-	 * @param probD
-	 */
-	public static void setProbDistribution(int probD){
-		if(probD != 1 && probD != 2)
-			throw new java.lang.IllegalArgumentException("We only accept UNIFORM or NORMAL. Get out freak!");
-		Freeway.prob = probD;
-	}
+		if(Freeway.prob < 1)		
+			Freeway.prob = 1;		
+	}		
+	/**		
+	 * if probD = 1 : Uniform distribution		
+	 * if probD = 2 : Normal distribution		
+	 * @param probD		
+	 */		
+	public static void setProbDistribution(int probD){		
+		if(probD != 1 && probD != 2)		
+			throw new java.lang.IllegalArgumentException("We only accept UNIFORM or NORMAL. Get out freak!");		
+		Freeway.prob = probD;		
+	}		
 
 	/**
 	 * Initializes arrays and starting configuration of cars.
 	 */
-	public void initialize(LatticeFrame spaceTime) {
+	public void initialize(LatticeFrame spaceTime, HistogramFrame hist1, HistogramFrame hist2) {
 		this.spaceTime = spaceTime;
+		this.hist1 = hist1;
+		this.hist2 = hist2;
 		x = new int[numberOfCars];
 		xtemp = new int[numberOfCars]; // used to allow parallel updating
 		v = new int[numberOfCars];
@@ -70,26 +83,25 @@ public class Freeway implements Drawable {
 		steps = 0;
 		t = 0;
 	}
-	
-	/**
-	 * Returns true if a given event occurs, false otherwise
-	 * @param isFirst - true if it's the initialization, false otherwise
-	 * @return true if a given event occurs, false otherwise
-	 */
-	private boolean probChooser(boolean isFirst) {
-		if(Freeway.prob == 1){
-			if(isFirst)
-				return Math.random() < 0.5;
-			return Math.random() < p;			
-		}
-		else{ /* Normal distribution */
-			double val = (new Random()).nextGaussian();
-			if(val < -4) val = -4.0;
-			else if(val > 4) val = 4.0;
-			if(isFirst)
-				return val < 0;
-			return val < -4.0 + p*8;
-		}			
+	/**		
+	 * Returns true if a given event occurs, false otherwise		
+	 * @param isFirst - true if it's the initialization, false otherwise		
+	 * @return true if a given event occurs, false otherwise		
+	 */		
+	private boolean probChooser(boolean isFirst) {		
+		if(Freeway.prob == 1){		
+			if(isFirst)		
+				return Math.random() < 0.5;		
+			return Math.random() < p;					
+		}		
+		else{ /* Normal distribution */		
+			double val = (new Random()).nextGaussian();		
+			if(val < -4) val = -4.0;		
+			else if(val > 4) val = 4.0;		
+			if(isFirst)		
+				return val < 0;		
+			return val < -4.0 + p*8;		
+		}					
 	}
 
 	/**
@@ -139,6 +151,17 @@ public class Freeway implements Drawable {
 				spaceTime.setValue(x[i], scrollTime-1, 1); // add new row
 			}
 		}
+		for (int i = 0; i < numberOfCars; i++) {
+			hist1.append(v[i]);
+		}
+		for (int i = 1; i < numberOfCars; i++) {
+			if (x[i] < x[i-1]) {
+				hist2.append(x[i] + roadLength - x[i-1]);
+			}
+			else {
+				hist2.append(x[i] - x[i-1]);
+			}
+		}
 	}
 
 	/**
@@ -159,3 +182,26 @@ public class Freeway implements Drawable {
 	}
 }
 
+/* 
+ * Open Source Physics software is free software; you can redistribute
+ * it and/or modify it under the terms of the GNU General Public License (GPL) as
+ * published by the Free Software Foundation; either version 2 of the License,
+ * or(at your option) any later version.
+
+ * Code that uses any portion of the code in the org.opensourcephysics package
+ * or any subpackage (subdirectory) of this package must must also be be released
+ * under the GNU GPL license.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston MA 02111-1307 USA
+ * or view the license online at http://www.gnu.org/copyleft/gpl.html
+ *
+ * Copyright (c) 2007  The Open Source Physics project
+ *                     http://www.opensourcephysics.org
+ */

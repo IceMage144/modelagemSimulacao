@@ -1,7 +1,7 @@
 /*
  * Open Source Physics software is free software as described near the bottom of this code file.
  *
- * For additional information and documentation on Open Source Physics please see: 
+ * For additional information and documentation on Open Source Physics please see:
  * <http://www.opensourcephysics.org/>
  */
 
@@ -18,69 +18,71 @@ import org.opensourcephysics.frames.*;
  * @version 1.0  revised 06/24/05
  */
 public class FreewayApp extends AbstractSimulation {
-  Freeway freeway = new Freeway();
-  DisplayFrame display = new DisplayFrame("Freeway");
-  LatticeFrame spaceTime = new LatticeFrame("space", "time", "Space Time Diagram");
+	Freeway freeway = new Freeway();
+	DisplayFrame display = new DisplayFrame("Freeway");
+	LatticeFrame spaceTime = new LatticeFrame("space", "time", "Space Time Diagram");
+	HistogramFrame hist1 = new HistogramFrame("Times", "Vel", "Velocity Histogram");
+	HistogramFrame hist2 = new HistogramFrame("Times", "Gap", "Gap Histogram");
 
-  /**
-   * Constructs the FreewayApp.
-   */
-  public FreewayApp() {
-    display.addDrawable(freeway);
-  }
+	/**
+	 * Constructs the FreewayApp.
+	 */
+	public FreewayApp() {
+		display.addDrawable(freeway);
+	}
 
-  /**
-   * Initializes the animation using the values in the control.
-   */
-  public void initialize() {
-    freeway.numberOfCars = control.getInt("Number of cars");
-    freeway.roadLength = control.getInt("Road length");
-    freeway.p = control.getDouble("Slow down probability");
-    Freeway.setProbDistribution(control.getInt("Prob (1 = Uniform, 2 = Normal)"));
-    freeway.maximumVelocity = control.getInt("Maximum velocity");
-    display.setPreferredMinMax(0, freeway.roadLength, -3, 4);
-    freeway.initialize(spaceTime);
-  }
+	/**
+	 * Initializes the animation using the values in the control.
+	 */
+	public void initialize() {
+		freeway.numberOfCars = control.getInt("Number of cars");
+		freeway.roadLength = control.getInt("Road length");
+		freeway.p = control.getDouble("Slow down probability");
+		freeway.maximumVelocity = control.getInt("Maximum velocity");
+		display.setPreferredMinMax(0, freeway.roadLength, -3, 4);
+		Freeway.setProbDistribution(control.getInt("Prob (1 = Uniform, 2 = Normal)"));	
+		freeway.initialize(spaceTime, hist1, hist2);
+	}
 
-  /**
-   * Does one iteration.
-   */
-  public void doStep() {
-    freeway.step();
-  }
+	/**
+	 * Does one iteration.
+	 */
+	public void doStep() {
+		freeway.step();
+	}
 
-  /**
-   * Resets animation to a predefined state.
-   */
-  public void reset() {
-    control.setValue("Number of cars", 10);
-    control.setValue("Road length", 50);
-    control.setValue("Slow down probability", 0.5);
-    control.setValue("Maximum velocity", 2);
-    control.setValue("Steps between plots", 1);
-    control.setValue("Prob (1 = Uniform, 2 = Normal)", 1);
-    enableStepsPerDisplay(true);
-  }
+	/**
+	 * Resets animation to a predefined state.
+	 */
+	public void reset() {
+		control.setValue("Number of cars", 10);
+		control.setValue("Road length", 50);
+		control.setValue("Slow down probability", 0.5);
+		control.setValue("Maximum velocity", 2);
+		control.setValue("Steps between plots", 1);
+		control.setValue("Prob (1 = Uniform, 2 = Normal)", 1);	
+		enableStepsPerDisplay(true);
+	}
 
-  /**
-   * Resets data without changing configuration
-   */
-  public void resetAverages() {
-    freeway.flow = 0;
-    freeway.steps = 0;
-  }
+	/**
+	 * Resets data without changing configuration
+	 */
+	public void resetAverages() {
+		freeway.flow = 0;
+		freeway.steps = 0;
+	}
 
-  /**
-   * Starts Java application.
-   * @param args  command line parameters
-   */
-  public static void main(String[] args) {
-    SimulationControl control = SimulationControl.createApp(new FreewayApp());
-    control.addButton("resetAverages", "resetAverages");
-  }
+	/**
+	 * Starts Java application.
+	 * @param args  command line parameters
+	 */
+	public static void main(String[] args) {
+		SimulationControl control = SimulationControl.createApp(new FreewayApp());
+		control.addButton("resetAverages", "resetAverages");
+	}
 }
 
-/* 
+/*
  * Open Source Physics software is free software; you can redistribute
  * it and/or modify it under the terms of the GNU General Public License (GPL) as
  * published by the Free Software Foundation; either version 2 of the License,
