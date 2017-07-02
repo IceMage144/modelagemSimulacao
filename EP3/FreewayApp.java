@@ -43,7 +43,7 @@ public class FreewayApp extends AbstractSimulation {
 		Freeway.setProbDistribution(control.getInt("Prob (1 = Uniform, 2 = Normal)"));
 		freeway.initialize(spaceTime, hist1, hist2);
 	}
-	
+
 	public void initialize2(int cars, int road) {
 		freeway.numberOfCars = cars;
 		freeway.roadLength = road;
@@ -60,9 +60,9 @@ public class FreewayApp extends AbstractSimulation {
 	public void doStep() {
 		freeway.step();
 	}
-	
-	public double getFlow() {
-		return freeway.flow/50000;
+
+	public double getFlow(int denom) {
+		return freeway.flow/denom;
 	}
 
 	/**
@@ -94,37 +94,67 @@ public class FreewayApp extends AbstractSimulation {
 		SimulationControl control = SimulationControl.createApp(new FreewayApp());
 		control.addButton("resetAverages", "resetAverages");
 	}
-	
+
 	/*Number of cars X flow main*/
 	/*public static void main(String[] args) {
 		FreewayApp freeway = new FreewayApp();
-		PlotFrame plot = new PlotFrame("Number of cars", "Flow", "Flow per number of cars");
+		PlotFrame plot = new PlotFrame("Density", "Flow", "Density X Flow");
+		int roadSize = 200;
+		int numOfSteps = 1000;
 		plot.setVisible(true);
-		for (int i = 1; i < 500; i++) {
-			freeway.initialize2(i, 500);
-			for (int j = 0; j < 1000; j++) {
+		for (int i = 1; i < roadSize; i++) {
+			freeway.initialize2(i, roadSize);
+			for (int j = 0; j < numOfSteps; j++) {
 				freeway.doStep();
 			}
-			plot.append(0, i, freeway.getFlow());
+			plot.append(0, i/(double)roadSize, freeway.getFlow(numOfSteps*roadSize));
 			plot.render();
 		}
 	}*/
-	
+
 	/*Road size X flow main*/
 	/*public static void main(String[] args) {
 		FreewayApp freeway = new FreewayApp();
-		PlotFrame plot = new PlotFrame("Road size", "Flow", "Flow X Road Size");
+		PlotFrame plot = new PlotFrame("Road size", "Flow", "Road Size X Flow");
+		int maxRoadSize = 500;
+		int numOfSteps = 1000;
+		int cars = 40;
 		plot.setVisible(true);
-		for (int i = 41; i < 500; i++) {
-			freeway.initialize2(40, i);
-			for (int j = 0; j < 1000; j++) {
+		for (int i = cars+1; i < maxRoadSize; i++) {
+			freeway.initialize2(cars, i);
+			for (int j = 0; j < numOfSteps; j++) {
 				freeway.doStep();
 			}
-			plot.append(0, i, freeway.getFlow());
+			plot.append(0, i, freeway.getFlow(numOfSteps*i));
 			plot.render();
 		}
 	}*/
-	
+
+	/*Calculate standard deviation*/
+	/*public static void main(String[] args) {
+		FreewayApp freeway = new FreewayApp();
+		int roadSize = 100;
+		int numOfSteps = 1000;
+		int cars = 25;
+		int simulations = 100;
+		double sum = 0;
+		double dp = 0;
+		double flow = 0;
+		for (int i = 0; i < simulations; i++) {
+			freeway.initialize2(cars, roadSize);
+			for (int j = 0; j < numOfSteps; j++) {
+				freeway.doStep();
+			}
+			flow = freeway.getFlow(numberOfSteps*roadSize);
+			sum += flow;
+			dp += flow*flow;
+		}
+		sum /= simulations;
+		dp /= simulations;
+		dp -= sum*sum;
+		System.out.println(Math.sqrt(dp));
+	}*/
+
 }
 
 /*
