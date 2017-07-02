@@ -43,12 +43,26 @@ public class FreewayApp extends AbstractSimulation {
 		Freeway.setProbDistribution(control.getInt("Prob (1 = Uniform, 2 = Normal)"));
 		freeway.initialize(spaceTime, hist1, hist2);
 	}
+	
+	public void initialize2(int cars, int road) {
+		freeway.numberOfCars = cars;
+		freeway.roadLength = road;
+		freeway.p = 0.5;
+		freeway.maximumVelocity = 2;
+		display.setPreferredMinMax(0, freeway.roadLength, -3, 4);
+		Freeway.setProbDistribution(1);
+		freeway.initialize(spaceTime, hist1, hist2);
+	}
 
 	/**
 	 * Does one iteration.
 	 */
 	public void doStep() {
 		freeway.step();
+	}
+	
+	public double getFlow() {
+		return freeway.flow/50000;
 	}
 
 	/**
@@ -80,6 +94,37 @@ public class FreewayApp extends AbstractSimulation {
 		SimulationControl control = SimulationControl.createApp(new FreewayApp());
 		control.addButton("resetAverages", "resetAverages");
 	}
+	
+	/*Number of cars X flow main*/
+	/*public static void main(String[] args) {
+		FreewayApp freeway = new FreewayApp();
+		PlotFrame plot = new PlotFrame("Number of cars", "Flow", "Flow per number of cars");
+		plot.setVisible(true);
+		for (int i = 1; i < 500; i++) {
+			freeway.initialize2(i, 500);
+			for (int j = 0; j < 1000; j++) {
+				freeway.doStep();
+			}
+			plot.append(0, i, freeway.getFlow());
+			plot.render();
+		}
+	}*/
+	
+	/*Road size X flow main*/
+	/*public static void main(String[] args) {
+		FreewayApp freeway = new FreewayApp();
+		PlotFrame plot = new PlotFrame("Road size", "Flow", "Flow X Road Size");
+		plot.setVisible(true);
+		for (int i = 41; i < 500; i++) {
+			freeway.initialize2(40, i);
+			for (int j = 0; j < 1000; j++) {
+				freeway.doStep();
+			}
+			plot.append(0, i, freeway.getFlow());
+			plot.render();
+		}
+	}*/
+	
 }
 
 /*
