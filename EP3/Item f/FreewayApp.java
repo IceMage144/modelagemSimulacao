@@ -37,8 +37,8 @@ public class FreewayApp extends AbstractSimulation {
     freeway.roadLength = control.getInt("Road length");
     freeway.p = control.getDouble("Slow down probability");
     freeway.maximumVelocity = control.getInt("Maximum velocity");
-    freeway.offramp = control.getInt("Off-ramp");
-    freeway.onramp = control.getInt("On-ramp");
+    freeway.offRamp = control.getInt("Off-ramp");
+    freeway.onRamp = control.getInt("On-ramp");
     display.setPreferredMinMax(0, freeway.roadLength, -3, 4);
     freeway.initialize(spaceTime);
   }

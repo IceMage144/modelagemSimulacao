@@ -4,7 +4,6 @@
  * For additional information and documentation on Open Source Physics please see: 
  * <http://www.opensourcephysics.org/>
  */
-
 package org.opensourcephysics.sip.ch14.traffic;
 import java.awt.Graphics;
 import org.opensourcephysics.display.*;
@@ -27,19 +26,16 @@ public class Freeway implements Drawable {
   public int maximumVelocity;
   public double p;             // probability of reducing velocity
   private CellLattice road;
+  public int offRamp;
+  public int onRamp;
+  public boolean isInLimbo = false;
+  public int carInLimbo;
   public double flow;
   public int steps, t;
   public int scrollTime = 100; // number of time steps before scrolling space-time diagram
-  public int offramp;
-  public int onramp;
-  public boolean isInLimbo;
-  public int carInLimbo;
   
-  /**
-   * Initializes arrays and starting configuration of cars.
-   */
   public void initialize(LatticeFrame spaceTime) {
-    this.spaceTime = spaceTime;
+	this.spaceTime = spaceTime;
     x = new int[numberOfCars];
     xtemp = new int[numberOfCars]; // used to allow parallel updating
     v = new int[numberOfCars];
@@ -50,12 +46,12 @@ public class Freeway implements Drawable {
     spaceTime.setIndexedColor(0, java.awt.Color.RED);
     spaceTime.setIndexedColor(1, java.awt.Color.GREEN);
     int d = roadLength/numberOfCars;
-    isInLimbo = false;
     
     x[0] = 0;
     v[0] = maximumVelocity;
     for(int i = 1;i<numberOfCars;i++) {
       x[i] = x[i-1]+d;
+      
       if(Math.random()<0.5) {
         v[i] = 0;
       } else {
@@ -66,128 +62,126 @@ public class Freeway implements Drawable {
     steps = 0;
     t = 0;
   }
-
+  
   /**
    * Does one time step
-   */
-  public void step() {
+   */  
+  public void step() { 
 	
-    for(int i = 0;i<numberOfCars;i++) {
+	  for(int i = 0;i<numberOfCars;i++) {
       xtemp[i] = x[i];
     }
-    
-    if (isInLimbo == false) {
-    	carInLimbo = (int)(Math.random() * (numberOfCars - 1));
-    	isInLimbo = true;
-    }
-    
+	
+	if(isInLimbo == false) {
+		carInLimbo = (int) (Math.random()*(numberOfCars - 1));
+		isInLimbo = true;
+	}
+	
     for(int i = 0;i<numberOfCars;i++) {
       if(v[i]<maximumVelocity && i != carInLimbo) {
         v[i]++;                                   // acceleration
-      } else if (i == carInLimbo) {              
-    	  if ((offramp != onramp)) {             // if they are equal, the problem wont simulate onramp and offramp
-    		  if (xtemp[i] < offramp) {          //decrease velocity until it arrives to offramp
+      } else if (i == carInLimbo) {
+    	  if (offRamp != onRamp) { // if they are equal, the problem wont simulate onramp and offramp
+    		  if(xtemp[i] < offRamp) { //decrease velocity until it arrives to offramp
     			  if (v[i] > 1) {
-    				  v[i]--;
+    			  	v[i]--;
+    		  	  }
+    			  if (v[i] == 0) { //with probability p, it can turn the velocity to zero, we fix that here
+    				  v[i] = 1;
     			  }
-    			  if (v[i] == 0) {   //with probability p, it can turn the velocity to zero, we fix that here
-    				  v[i]++;
-    			  }
-    		  } else if ((xtemp[i] > offramp) && (v[i]< maximumVelocity)) { //increase the velocity if it already passed the offramp 
-    			  v[i]++;
-    		  } else if (xtemp[i] == offramp) { //take the car out of the lane
-    			  x[i]= -1;
     		  }
-    	  }
-    	  else if (v[i]<maximumVelocity) { //increase the velocity
+    		  else if (xtemp[i] > offRamp && v[i] < maximumVelocity){ //increase the velocity if it already passed the offramp 
+    			  v[i]++;
+    		  }
+    		  else if (xtemp[i] == offRamp) { //take the car out of the lane
+    			  xtemp[i] = -1;
+    		  }
+    	  } else if(v[i] < maximumVelocity) { //increase the velocity
     		  v[i]++;
     	  }
       }
       
-      if (v[i] != -1) {
-    	  int d = xtemp[(i+1)%numberOfCars]-xtemp[i]; // distance between cars
-      
-    	  if(d<=0) {                                  // periodic boundary conditions, d = 0 correctly treats one car on road
-    		  d += roadLength;
-    	  }
-    	  if(v[i]>=d) {
-    		  v[i] = d-1; // slow down due to cars in front
-    	  }
-      }
-      
-      if (v[(i+1)%numberOfCars] == -1) { //calculate the distance when the car in front is in limbo
-    	  int d = xtemp[(i+2)%numberOfCars]-xtemp[i]; // distance between cars
-          
-    	  if(d<=0) {                                  // periodic boundary conditions, d = 0 correctly treats one car on road
-    		  d += roadLength;
-    	  }
-    	  if(v[i]>=d) {
-    		  v[i] = d-1; // slow down due to cars in front
-    	  }
+      if(x[(i+1)%numberOfCars] == -1) { //calculate the distance when the car in front is in limbo
+     	 int d = xtemp[(i+2)%numberOfCars]-xtemp[i]; // distance between cars
+         if(d<=0) {                                  // periodic boundary conditions, d = 0 correctly treats one car on road
+           d += roadLength;
+         }
+         if(v[i]>=d) {
+           v[i] = d-1; // slow down due to cars in front
+         }  
+      } 
+      else if(x[i] != -1) {
+    	int d = xtemp[(i+1)%numberOfCars]-xtemp[i]; // distance between cars
+        if(d<=0) {                                  // periodic boundary conditions, d = 0 correctly treats one car on road
+          d += roadLength;
+        }
+        if(v[i]>=d) {
+          v[i] = d-1; // slow down due to cars in front
+        }
       }
       
       if((v[i]>0)&&(Math.random()<p)) {
-    	  v[i]--;     // randomization
+        v[i]--;     // randomization
       }
       
-      if (x[i] != -1) { //update x
-    	  x[i] = (xtemp[i]+v[i])%roadLength;
-      } else if (x[(i+1)%numberOfCars] > onramp) { 
+      if(x[i] != -1) {
+        x[i] = (xtemp[i]+v[i])%roadLength;
+      }
+      
+      else if(x[(i+1)%numberOfCars] > onRamp) {
     	  boolean flag = false;
-    	  for(int j = 0;j<numberOfCars;j++) {
-    		  if (xtemp[j] == onramp) {
-    			  flag = true;
+    	  for(int j = 0; j < numberOfCars;j++) {
+    		  if(xtemp[j] == onRamp) {
+    			flag = true;
+    			break;
     		  }
     	  }
-    	  if (flag == false) {         //puts the car back in the lane
-    		  x[i] = onramp;       
-    		  isInLimbo = false;
+    	  if(flag == false) {
+    	    x[i] = onRamp;
+    	    isInLimbo = false;
     	  }
       }
       flow += v[i];
-      
     }
     steps++;
     computeSpaceTimeDiagram();
   }
-
+  
   public void computeSpaceTimeDiagram() {
     t++;
     if(t<scrollTime) {
       for(int i = 0;i<numberOfCars;i++) {
-    	  if (x[i] != -1) { 
-    		  spaceTime.setValue(x[i], t, 1);
-    	  }
+        if(x[i] != -1) {
+    	  spaceTime.setValue(x[i], t, 1);
+        }  
       }
-    } else {                                       // scroll diagram
+    } 
+    else {                                       // scroll diagram
       for(int y = 0;y<scrollTime-1;y++) {
         for(int i = 0;i<roadLength;i++) {
           spaceTime.setValue(i, y, spaceTime.getValue(i, y+1));
-        }
+         }
       }
       for(int i = 0;i<roadLength;i++) {
         spaceTime.setValue(i, scrollTime-1, 0);    // zero last row
       }
       for(int i = 0;i<numberOfCars;i++) {
-    	  if (x[i] != -1) {
-    		  spaceTime.setValue(x[i], scrollTime-1, 1); // add new row
-    	  }
+    	if(x[i] != -1) {
+    	  spaceTime.setValue(x[i], scrollTime-1, 1); // add new row
+    	}
       }
     }
   }
-
-  /**
-    * Draws freeway.
-    */
+  
   public void draw(DrawingPanel panel, Graphics g) {
-    if(x==null) {
+	if(x==null) {
       return;
     }
     road.setBlock(0, 0, new byte[roadLength][1]);
     for(int i = 0;i<numberOfCars;i++) {
-    	if (x[i] != -1) {
-    		road.setValue(x[i], 0, (byte) 1);
-    	}
+      if(x[i] != -1) {
+    	road.setValue(x[i], 0, (byte) 1);
+      }
     }
     road.draw(panel, g);
     g.drawString("Number of Steps = "+steps, 10, 20);
